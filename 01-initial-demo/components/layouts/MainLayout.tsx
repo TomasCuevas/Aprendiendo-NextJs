@@ -8,7 +8,7 @@ import Styles from "./MainLayout.module.css";
 interface MainLayoutProps {
   title: string;
   description: string;
-  children: React.ReactNode | React.ReactNode[];
+  children: JSX.Element | JSX.Element[];
 }
 
 export const MainLayout = ({

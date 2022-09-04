@@ -1,5 +1,5 @@
 interface LightLayoutProps {
-  children: React.ReactNode | React.ReactNode[];
+  children: JSX.Element | JSX.Element[];
 }
 
 export const LightLayout = ({ children }: LightLayoutProps) => {
