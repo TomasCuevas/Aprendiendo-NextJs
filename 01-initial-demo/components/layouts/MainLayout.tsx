@@ -5,7 +5,17 @@ import { Navbar } from "../Navbar";
 
 import Styles from "./MainLayout.module.css";
 
-export const MainLayout = ({ title, description, children }) => {
+interface MainLayoutProps {
+  title: string;
+  description: string;
+  children: React.ReactNode | React.ReactNode[];
+}
+
+export const MainLayout = ({
+  title,
+  description,
+  children,
+}: MainLayoutProps) => {
   return (
     <div className={Styles.container}>
       <Head>

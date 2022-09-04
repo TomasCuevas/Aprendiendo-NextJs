@@ -1,4 +1,8 @@
-export const LightLayout = ({ children }) => {
+interface LightLayoutProps {
+  children: React.ReactNode | React.ReactNode[];
+}
+
+export const LightLayout = ({ children }: LightLayoutProps) => {
   return (
     <div
       style={{

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { LightLayout } from "../../components/layouts/LightLayout";
 
 //* layout *//
 import { MainLayout } from "../../components/layouts/MainLayout";
+import { LightLayout } from "../../components/layouts/LightLayout";
 
 import styles from "../../styles/Home.module.css";
 
