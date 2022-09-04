@@ -16,7 +16,7 @@ export default function AboutPage() {
 
       <p className={styles.description}>
         Get started by editing{" "}
-        <code className={styles.code}>pages/about.jsx</code>
+        <code className={styles.code}>pages/about/index.jsx</code>
       </p>
     </>
   );
