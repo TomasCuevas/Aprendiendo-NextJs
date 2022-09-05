@@ -1,5 +1,7 @@
 import Head from "next/head";
 
+import { Navbar } from "../ui";
+
 interface LayoutProps {
   children: JSX.Element | JSX.Element[];
   title?: string;
@@ -17,7 +19,8 @@ export const Layout = ({ children, title }: LayoutProps) => {
         />
         <meta name="keywords" content={`${title}, pokemon, pokedex`} />
       </Head>
-      <main>{children}</main>
+      <Navbar />
+      <main className="py-5">{children}</main>
     </>
   );
 };
