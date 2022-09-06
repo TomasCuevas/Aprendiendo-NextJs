@@ -8,24 +8,37 @@ import { pokeApi } from "../api";
 import { Layout } from "../components/layouts";
 
 //* interfaces *//
-import { PokemonListResponse } from "../interfaces";
+import { Pokemon, PokemonListResponse } from "../interfaces";
 
-const HomePage: NextPage = (props) => {
-  console.log({ props });
+interface HomePageProps {
+  pokemons: Pokemon[];
+}
 
+const HomePage: NextPage<HomePageProps> = ({ pokemons }) => {
   return (
     <Layout title="Listado de Pokemons">
-      <Button color={"gradient"}>Hola Mundo</Button>
+      <ul>
+        {pokemons.map(({ id, img, name, url }) => (
+          <li key={id}>{`#${id} - ${name}`}</li>
+        ))}
+      </ul>
     </Layout>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await pokeApi.get<PokemonListResponse>("/pokemon?limit=150");
+  const pokemons: Pokemon[] = data.results.map((pokemon, index) => ({
+    ...pokemon,
+    id: (index + 1).toString(),
+    img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${
+      index + 1
+    }.svg`,
+  }));
 
   return {
     props: {
-      pokemons: data.results,
+      pokemons,
     },
   };
 };

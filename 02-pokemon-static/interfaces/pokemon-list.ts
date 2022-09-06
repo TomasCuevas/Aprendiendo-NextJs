@@ -6,6 +6,8 @@ export interface PokemonListResponse {
 }
 
 export interface Pokemon {
+  id: string;
+  img: string;
   name: string;
   url: string;
 }
