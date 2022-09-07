@@ -16,7 +16,7 @@ interface PokemonPageProps {
 
 export const PokemonPage: NextPage<PokemonPageProps> = ({ pokemon }) => {
   return (
-    <Layout title={`${pokemon.name}`}>
+    <Layout title={`${pokemon.name.toUpperCase()} - Pokemon`}>
       <Grid.Container className="mt-1 gap-5 justify-center">
         <Grid xs={12} sm={3}>
           <Card isHoverable className="p-[30px]">
@@ -48,22 +48,22 @@ export const PokemonPage: NextPage<PokemonPageProps> = ({ pokemon }) => {
                 <Image
                   src={pokemon.sprites.front_default}
                   alt={pokemon.name}
-                  className="w-[100px] h-[100px]"
+                  className="w-[150px] h-[150px]"
                 />
                 <Image
                   src={pokemon.sprites.back_default}
                   alt={pokemon.name}
-                  className="w-[100px] h-[100px]"
+                  className="w-[150px] h-[150px]"
                 />
                 <Image
                   src={pokemon.sprites.front_shiny}
                   alt={pokemon.name}
-                  className="w-[100px] h-[100px]"
+                  className="w-[150px] h-[150px]"
                 />
                 <Image
                   src={pokemon.sprites.back_shiny}
                   alt={pokemon.name}
-                  className="w-[100px] h-[100px]"
+                  className="w-[150px] h-[150px]"
                 />
               </Container>
             </Card.Body>

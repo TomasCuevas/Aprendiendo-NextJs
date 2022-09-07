@@ -12,7 +12,7 @@ export const PokemonCard = ({ id, img, name, url }: Pokemon) => {
   };
 
   return (
-    <Grid onClick={onClick} xs={6} sm={3} md={2} xl={1} key={id}>
+    <Grid onClick={onClick} xs={6} sm={3} md={2} xl={2} key={id}>
       <Card isHoverable isPressable>
         <Card.Body css={{ p: 1 }}>
           <Card.Image height={150} width="100%" src={img} alt={name} />
