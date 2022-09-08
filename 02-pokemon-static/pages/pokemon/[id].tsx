@@ -8,7 +8,7 @@ import { pokeApi } from "../../api";
 import { Layout } from "../../components/layouts";
 
 //* utils *//
-import { existInFavorites, toggleFavorite } from "../../utils";
+import { localFavorites } from "../../utils";
 
 //* interfaces *//
 import { PokemonFull } from "../../interfaces";
@@ -20,12 +20,12 @@ interface PokemonPageProps {
 
 export const PokemonPage: NextPage<PokemonPageProps> = ({ pokemon }) => {
   const [isInFavorite, setIsInFavorite] = useState<boolean>(
-    existInFavorites(pokemon.id)
+    localFavorites.existInFavorites(pokemon.id)
   );
 
   const onToggleFavorite = () => {
-    toggleFavorite(pokemon.id);
-    setIsInFavorite(existInFavorites(pokemon.id));
+    localFavorites.toggleFavorite(pokemon.id);
+    setIsInFavorite(localFavorites.existInFavorites(pokemon.id));
   };
 
   return (
