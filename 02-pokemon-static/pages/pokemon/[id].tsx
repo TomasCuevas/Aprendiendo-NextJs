@@ -7,6 +7,9 @@ import { pokeApi } from "../../api";
 //* layout *//
 import { Layout } from "../../components/layouts";
 
+//* utils *//
+import { localFavorites } from "../../utils";
+
 //* interfaces *//
 import { PokemonFull } from "../../interfaces";
 
@@ -15,6 +18,10 @@ interface PokemonPageProps {
 }
 
 export const PokemonPage: NextPage<PokemonPageProps> = ({ pokemon }) => {
+  const onToggleFavorite = () => {
+    localFavorites(pokemon.id);
+  };
+
   return (
     <Layout title={`${pokemon.name.toUpperCase()} - Pokemon`}>
       <Grid.Container className="mt-1 gap-5 justify-center">
@@ -38,7 +45,7 @@ export const PokemonPage: NextPage<PokemonPageProps> = ({ pokemon }) => {
               <Text h1 className="capitalize">
                 {pokemon.name}
               </Text>
-              <Button color="gradient" ghost>
+              <Button color="gradient" ghost onPress={onToggleFavorite}>
                 Guardar en favoritos
               </Button>
             </Card.Header>

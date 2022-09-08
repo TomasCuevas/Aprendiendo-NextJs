@@ -6,7 +6,7 @@ export const Navbar = () => {
   const { theme } = useTheme();
 
   return (
-    <div className="flex w-full items-center justify-start p-5 bg-gray-800 sticky top-0 z-10">
+    <div className="flex w-full items-center justify-start px-7 py-2 bg-gray-800 sticky top-0 z-10">
       <NextLink href="/">
         <Link>
           <Image
