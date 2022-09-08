@@ -8,18 +8,24 @@ import { pokeApi } from "../../api";
 import { Layout } from "../../components/layouts";
 
 //* utils *//
-import { localFavorites } from "../../utils";
+import { existInFavorites, toggleFavorite } from "../../utils";
 
 //* interfaces *//
 import { PokemonFull } from "../../interfaces";
+import { useState } from "react";
 
 interface PokemonPageProps {
   pokemon: PokemonFull;
 }
 
 export const PokemonPage: NextPage<PokemonPageProps> = ({ pokemon }) => {
+  const [isInFavorite, setIsInFavorite] = useState<boolean>(
+    existInFavorites(pokemon.id)
+  );
+
   const onToggleFavorite = () => {
-    localFavorites(pokemon.id);
+    toggleFavorite(pokemon.id);
+    setIsInFavorite(existInFavorites(pokemon.id));
   };
 
   return (
@@ -45,8 +51,12 @@ export const PokemonPage: NextPage<PokemonPageProps> = ({ pokemon }) => {
               <Text h1 className="capitalize">
                 {pokemon.name}
               </Text>
-              <Button color="gradient" ghost onPress={onToggleFavorite}>
-                Guardar en favoritos
+              <Button
+                color="gradient"
+                ghost={!isInFavorite}
+                onPress={onToggleFavorite}
+              >
+                {isInFavorite ? <>En favoritos</> : <>Guardar en favoritos</>}
               </Button>
             </Card.Header>
             <Card.Body>
