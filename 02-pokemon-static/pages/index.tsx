@@ -31,8 +31,8 @@ const HomePage: NextPage<HomePageProps> = ({ pokemons }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await pokeApi.get<PokemonListResponse>("/pokemon?limit=150");
-  const pokemons: Pokemon[] = data.results.map((pokemon, index) => ({
-    ...pokemon,
+  const pokemons = data.results.map((pokemon, index) => ({
+    name: pokemon.name,
     id: (index + 1).toString(),
     img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${
       index + 1

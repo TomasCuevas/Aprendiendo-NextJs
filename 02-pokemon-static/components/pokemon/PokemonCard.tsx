@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 //* interfaces *//
 import { Pokemon } from "../../interfaces";
 
-export const PokemonCard = ({ id, img, name, url }: Pokemon) => {
+export const PokemonCard = ({ id, img, name }: Pokemon) => {
   const router = useRouter();
 
   const onClick = () => {
