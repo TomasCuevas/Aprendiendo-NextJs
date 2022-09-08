@@ -9,7 +9,7 @@ export const FavoriteList = ({
   favoritePokemons: number[];
 }) => {
   return (
-    <Grid.Container className="gap-1 flex-row justify-start">
+    <Grid.Container gap={2} className="flex-row justify-start">
       {favoritePokemons.map((id) => (
         <FavoritePokeCard key={id} pokemonId={id} />
       ))}
