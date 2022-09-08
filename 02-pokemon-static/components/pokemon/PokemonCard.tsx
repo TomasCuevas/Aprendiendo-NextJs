@@ -8,7 +8,7 @@ export const PokemonCard = ({ id, img, name }: Pokemon) => {
   const router = useRouter();
 
   const onClick = () => {
-    router.push(`/pokemon/${id}`);
+    router.push(`/pokemon/name/${name}`);
   };
 
   return (

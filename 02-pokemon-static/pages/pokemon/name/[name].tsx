@@ -10,7 +10,7 @@ import { pokeApi } from "../../../api";
 import { Layout } from "../../../components/layouts";
 
 //* utils *//
-import { localFavorites } from "../../../utils";
+import { getPokemonInfo, localFavorites } from "../../../utils";
 
 //* interfaces *//
 import { PokemonFull, PokemonListResponse } from "../../../interfaces";
@@ -119,13 +119,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { name } = params as { name: string };
-  const { data } = await pokeApi.get<PokemonFull>(`/pokemon/${name}`);
-
-  const pokemon = {
-    id: data.id,
-    name: data.name,
-    sprites: data.sprites,
-  };
+  const pokemon = await getPokemonInfo(name);
 
   return {
     props: {
