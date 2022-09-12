@@ -1,16 +1,19 @@
-import { useState, useContext, createContext } from "react";
+import { useState, createContext } from "react";
+
+//* CONTEXT *//
+//* CONTEXT *//
 
 interface ContextProps {
   sideMenuOpen: boolean;
+  onToggleSidebar: (value: boolean) => void;
 }
 
 export const UIContext = createContext({} as ContextProps);
 
-export interface UIState {
-  sideMenuOpen: boolean;
-}
+//* PROVIDER *//
+//* PROVIDER *//
 
-const UI_INITIAL_STATE: UIState = {
+const UI_INITIAL_STATE = {
   sideMenuOpen: false,
 };
 
@@ -19,10 +22,16 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
     UI_INITIAL_STATE.sideMenuOpen
   );
 
+  const onToggleSidebar = (value: boolean): void => setSideMenuOpen(value);
+
   return (
     <UIContext.Provider
       value={{
+        // properties
         sideMenuOpen,
+
+        // methods
+        onToggleSidebar,
       }}
     >
       {children}
