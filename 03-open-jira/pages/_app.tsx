@@ -2,8 +2,7 @@ import type { AppProps } from "next/app";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 
 //* contexts *//
-import { UIProvider } from "../context/ui";
-import { EntriesProvider } from "../context/entries";
+import { UIProvider, EntriesProvider } from "../context";
 
 //* styles and themes *//
 import { lightTheme, darkTheme } from "../themes";

@@ -2,7 +2,7 @@ import { useState, createContext } from "react";
 import { v4 } from "uuid";
 
 //* interfaces *//
-import { Entry } from "../../interfaces";
+import { Entry } from "../interfaces";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -20,20 +20,21 @@ const ENTRIES_INITIAL_STATE: ContextProps = {
   entries: [
     {
       _id: v4(),
-      description: "Ut esse amet minim ut deserunt.",
+      description: "Pendiente: Ut esse amet minim ut deserunt.",
       createdAt: Number(new Date().getTime()),
       status: "pending",
     },
     {
       _id: v4(),
       description:
-        "Velit labore tempor esse quis minim nisi ullamco excepteur cillum nostrud minim",
+        "En progreso: Velit labore tempor esse quis minim nisi ullamco excepteur cillum nostrud minim",
       createdAt: Number(new Date().getTime() - 1000000),
       status: "in-progress",
     },
     {
       _id: v4(),
-      description: "Aliqua qui Lorem eiusmod non ex culpa pariatur.",
+      description:
+        "Finalizada: Aliqua qui Lorem eiusmod non ex culpa pariatur.",
       createdAt: Number(new Date().getTime() - 50000000),
       status: "finished",
     },

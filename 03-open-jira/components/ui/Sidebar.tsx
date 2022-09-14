@@ -14,7 +14,7 @@ import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
 //* context *//
-import { UIContext } from "../../context/ui";
+import { UIContext } from "../../context";
 
 const menuItems: string[] = ["Inbox", "Starred", "Send Email", "Draft"];
 

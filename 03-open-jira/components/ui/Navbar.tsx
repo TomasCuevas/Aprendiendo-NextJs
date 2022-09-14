@@ -4,7 +4,7 @@ import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
 //* context *//
-import { UIContext } from "../../context/ui";
+import { UIContext } from "../../context";
 
 export const Navbar = () => {
   const { onToggleSidebar } = useContext(UIContext);
