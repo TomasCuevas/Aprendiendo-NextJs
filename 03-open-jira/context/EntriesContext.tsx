@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, PropsWithChildren } from "react";
 import { v4 } from "uuid";
 
 //* interfaces *//
@@ -9,6 +9,7 @@ import { Entry } from "../interfaces";
 
 interface ContextProps {
   entries: Entry[];
+  addNewEntry: (entry: Entry) => void;
 }
 
 export const EntriesContext = createContext({} as ContextProps);
@@ -39,21 +40,23 @@ const ENTRIES_INITIAL_STATE: ContextProps = {
       status: "finished",
     },
   ],
+  addNewEntry: () => {},
 };
 
-export const EntriesProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [entries, setEntries] = useState<Entry[]>(
     ENTRIES_INITIAL_STATE.entries
   );
+
+  const addNewEntry = (entry: Entry) => {
+    setEntries((prevEntries) => [...prevEntries, entry]);
+  };
 
   return (
     <EntriesContext.Provider
       value={{
         entries,
+        addNewEntry,
       }}
     >
       {children}

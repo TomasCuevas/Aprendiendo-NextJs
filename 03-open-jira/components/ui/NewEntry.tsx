@@ -1,16 +1,38 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Box, TextField } from "@mui/material";
+import { v4 } from "uuid";
 
+//* icons *//
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
+//* context *//
+import { EntriesContext } from "../../context/EntriesContext";
+
+//* interface *//
+import { Entry } from "../../interfaces";
+
 export const NewEntry = () => {
+  const { addNewEntry } = useContext(EntriesContext);
   const [isAdding, setIsAdding] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [touched, setTouched] = useState(false);
 
-  const onSave = () => {
+  const onSave = async () => {
     if (inputValue.length < 1) return;
+
+    const newEntry: Entry = {
+      description: inputValue,
+      _id: v4(),
+      createdAt: Number(new Date().getTime()),
+      status: "pending",
+    };
+
+    addNewEntry(newEntry);
+
+    setIsAdding(false);
+    setInputValue("");
+    setTouched(false);
   };
 
   return (

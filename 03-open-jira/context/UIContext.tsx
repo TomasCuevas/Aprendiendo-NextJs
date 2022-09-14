@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, PropsWithChildren } from "react";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -17,7 +17,7 @@ const UI_INITIAL_STATE = {
   sideMenuOpen: false,
 };
 
-export const UIProvider = ({ children }: { children: React.ReactNode }) => {
+export const UIProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [sideMenuOpen, setSideMenuOpen] = useState<boolean>(
     UI_INITIAL_STATE.sideMenuOpen
   );
