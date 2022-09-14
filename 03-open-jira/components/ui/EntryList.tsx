@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, DragEvent } from "react";
 import { Paper, List } from "@mui/material";
 
 //* components *//
@@ -22,8 +22,16 @@ export const EntryList = ({ status }: EntryListProps) => {
     [entries, status]
   );
 
+  const allowDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const onDropEntry = (event: DragEvent<HTMLDivElement>) => {
+    const id = event.dataTransfer.getData("id");
+  };
+
   return (
-    <div>
+    <div onDrop={onDropEntry} onDragOver={allowDrop}>
       <Paper
         sx={{
           height: "calc(100vh - 250px)",
