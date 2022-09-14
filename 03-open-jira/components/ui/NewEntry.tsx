@@ -11,10 +11,11 @@ import { EntriesContext } from "../../context/EntriesContext";
 
 //* interface *//
 import { Entry } from "../../interfaces";
+import { UIContext } from "../../context";
 
 export const NewEntry = () => {
   const { addNewEntry } = useContext(EntriesContext);
-  const [isAdding, setIsAdding] = useState(false);
+  const { isAddingEntry, onToggleAddingEntry } = useContext(UIContext);
   const [inputValue, setInputValue] = useState("");
   const [touched, setTouched] = useState(false);
 
@@ -30,14 +31,14 @@ export const NewEntry = () => {
 
     addNewEntry(newEntry);
 
-    setIsAdding(false);
+    onToggleAddingEntry(false);
     setInputValue("");
     setTouched(false);
   };
 
   return (
     <Box sx={{ padding: 1, marginBottom: 2 }}>
-      {isAdding ? (
+      {isAddingEntry ? (
         <>
           <TextField
             fullWidth
@@ -56,7 +57,7 @@ export const NewEntry = () => {
             <Button
               variant="text"
               onClick={() => {
-                setIsAdding(false);
+                onToggleAddingEntry(false);
                 setTouched(false);
               }}
             >
@@ -77,7 +78,7 @@ export const NewEntry = () => {
           startIcon={<AddCircleOutlineOutlinedIcon />}
           fullWidth
           variant="outlined"
-          onClick={() => setIsAdding(true)}
+          onClick={() => onToggleAddingEntry(true)}
         >
           Agregar Tarea
         </Button>

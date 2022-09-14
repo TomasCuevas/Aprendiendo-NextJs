@@ -48,14 +48,17 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
     ENTRIES_INITIAL_STATE.entries
   );
 
-  const addNewEntry = (entry: Entry) => {
+  const addNewEntry = (entry: Entry): void => {
     setEntries((prevEntries) => [...prevEntries, entry]);
   };
 
   return (
     <EntriesContext.Provider
       value={{
+        // properties
         entries,
+
+        // methods
         addNewEntry,
       }}
     >
