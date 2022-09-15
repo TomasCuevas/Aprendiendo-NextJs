@@ -10,6 +10,7 @@ import { Entry } from "../interfaces";
 interface ContextProps {
   entries: Entry[];
   addNewEntry: (entry: Entry) => void;
+  entryUpdated: (entry: Entry) => void;
 }
 
 export const EntriesContext = createContext({} as ContextProps);
@@ -41,6 +42,7 @@ const ENTRIES_INITIAL_STATE: ContextProps = {
     },
   ],
   addNewEntry: () => {},
+  entryUpdated: () => {},
 };
 
 export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
@@ -51,6 +53,18 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const addNewEntry = (entry: Entry): void => {
     setEntries((prevEntries) => [...prevEntries, entry]);
   };
+  const entryUpdated = (entryUpdated: Entry): void => {
+    const newEntries = entries.map((entry) => {
+      if (entry._id === entryUpdated._id) {
+        entry.status = entryUpdated.status;
+        entry.description = entryUpdated.description;
+      }
+
+      return entry;
+    });
+
+    setEntries(newEntries);
+  };
 
   return (
     <EntriesContext.Provider
@@ -60,6 +74,7 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
         // methods
         addNewEntry,
+        entryUpdated,
       }}
     >
       {children}

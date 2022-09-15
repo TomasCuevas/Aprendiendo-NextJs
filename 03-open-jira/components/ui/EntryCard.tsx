@@ -25,17 +25,8 @@ export const EntryCard = ({ entry }: EntryCardProps) => {
     onToggleDraggin(true);
   };
 
-  const onDragEnd = () => {
-    onToggleDraggin(false);
-  };
-
   return (
-    <Card
-      sx={{ marginBottom: 1 }}
-      draggable
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-    >
+    <Card sx={{ marginBottom: 1 }} draggable onDragStart={onDragStart}>
       <CardActionArea>
         <CardContent>
           <Typography sx={{ whiteSpace: "pre-line" }}>
