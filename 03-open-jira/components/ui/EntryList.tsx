@@ -4,8 +4,11 @@ import { Paper, List } from "@mui/material";
 //* components *//
 import { EntryCard } from "./";
 
-//* context *//
-import { EntriesContext } from "../../context";
+//* contexts *//
+import { EntriesContext, UIContext } from "../../context";
+
+//* styles *//
+import Styles from "./EntryList.module.css";
 
 //* interfaces *//
 import { EntryStatus } from "../../interfaces";
@@ -16,6 +19,7 @@ interface EntryListProps {
 
 export const EntryList = ({ status }: EntryListProps) => {
   const { entries } = useContext(EntriesContext);
+  const { isDraggin } = useContext(UIContext);
 
   const entriesByStatus = useMemo(
     () => entries.filter((entry) => entry.status === status),
@@ -31,7 +35,11 @@ export const EntryList = ({ status }: EntryListProps) => {
   };
 
   return (
-    <div onDrop={onDropEntry} onDragOver={allowDrop}>
+    <div
+      className={isDraggin ? Styles.draggin : ""}
+      onDrop={onDropEntry}
+      onDragOver={allowDrop}
+    >
       <Paper
         sx={{
           height: "calc(100vh - 250px)",
@@ -40,7 +48,7 @@ export const EntryList = ({ status }: EntryListProps) => {
           padding: 1,
         }}
       >
-        <List sx={{ opacity: 1 }}>
+        <List sx={{ opacity: isDraggin ? 0.2 : 1, transition: "all .3s" }}>
           {entriesByStatus.map((entry) => (
             <EntryCard key={entry._id} entry={entry} />
           ))}

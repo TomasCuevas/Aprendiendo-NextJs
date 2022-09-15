@@ -1,4 +1,4 @@
-import { DragEvent } from "react";
+import { DragEvent, useContext } from "react";
 import {
   Card,
   CardActionArea,
@@ -6,6 +6,9 @@ import {
   Typography,
   CardContent,
 } from "@mui/material";
+
+//* context *//
+import { UIContext } from "../../context";
 
 //* interfaces *//
 import { Entry } from "../../interfaces";
@@ -15,11 +18,16 @@ interface EntryCardProps {
 }
 
 export const EntryCard = ({ entry }: EntryCardProps) => {
+  const { onToggleDraggin } = useContext(UIContext);
+
   const onDragStart = (event: DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData("id", entry._id);
+    onToggleDraggin(true);
   };
 
-  const onDragEnd = () => {};
+  const onDragEnd = () => {
+    onToggleDraggin(false);
+  };
 
   return (
     <Card
