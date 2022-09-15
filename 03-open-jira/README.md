@@ -11,5 +11,5 @@ Para correr localmente, se necesita la base de datos.
 MongoDB local URL:
 
 ```
-  mongodb://localhost:27017
+  mongodb://localhost:27017/entries
 ```
