@@ -1,7 +1,8 @@
-import { useState, createContext, PropsWithChildren } from "react";
+import { useState, createContext, PropsWithChildren, useEffect } from "react";
 
 //* interfaces *//
 import { Entry } from "../interfaces";
+import { entriesApi } from "../api";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -44,6 +45,15 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     setEntries(newEntries);
   };
+
+  const refreshEntries = async () => {
+    const { data } = await entriesApi.get<Entry[]>("/entries");
+    setEntries(data);
+  };
+
+  useEffect(() => {
+    refreshEntries();
+  }, []);
 
   return (
     <EntriesContext.Provider

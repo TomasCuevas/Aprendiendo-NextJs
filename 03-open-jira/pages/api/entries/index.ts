@@ -2,10 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../database";
 import EntryModel, { IEntry } from "../../../database/models/Entry";
 
-type Data = {
-  message?: string;
-  entries?: IEntry[];
-};
+type Data =
+  | {
+      message: string;
+    }
+  | IEntry[];
 
 export default function handler(
   req: NextApiRequest,
@@ -21,16 +22,15 @@ export default function handler(
 }
 
 const getEntries = async (res: NextApiResponse<Data>) => {
-  await db.connect();
+  try {
+    await db.connect();
 
-  const entries: IEntry[] = await EntryModel.find().sort({
-    createdAt: "ascending",
-  });
+    const entries = await EntryModel.find().sort({
+      createdAt: "ascending",
+    });
 
-  res.status(200).json({
-    message: "Todo salo bien",
-    entries,
-  });
-
-  await db.disconnect();
+    return res.status(200).json(entries);
+  } catch (error) {
+    console.log(error);
+  }
 };
