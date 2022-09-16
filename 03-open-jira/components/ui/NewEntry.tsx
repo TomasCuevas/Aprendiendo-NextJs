@@ -22,14 +22,7 @@ export const NewEntry = () => {
   const onSave = async () => {
     if (inputValue.length < 1) return;
 
-    const newEntry: Entry = {
-      description: inputValue,
-      _id: v4(),
-      createdAt: Number(new Date().getTime()),
-      status: "pending",
-    };
-
-    addNewEntry(newEntry);
+    await addNewEntry(inputValue);
 
     onToggleAddingEntry(false);
     setInputValue("");

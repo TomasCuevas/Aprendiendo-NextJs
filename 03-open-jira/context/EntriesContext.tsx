@@ -9,7 +9,7 @@ import { entriesApi } from "../api";
 
 interface ContextProps {
   entries: Entry[];
-  addNewEntry: (entry: Entry) => void;
+  addNewEntry: (description: string) => void;
   entryUpdated: (entry: Entry) => void;
 }
 
@@ -29,8 +29,11 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
     ENTRIES_INITIAL_STATE.entries
   );
 
-  const addNewEntry = (entry: Entry): void => {
-    setEntries((prevEntries) => [...prevEntries, entry]);
+  const addNewEntry = async (description: string) => {
+    const { data: newEntry } = await entriesApi.post<Entry>("/entries", {
+      description,
+    });
+    setEntries((prevEntries) => [...prevEntries, newEntry]);
   };
 
   const entryUpdated = (entryUpdated: Entry): void => {
@@ -47,8 +50,8 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
   };
 
   const refreshEntries = async () => {
-    const { data } = await entriesApi.get<Entry[]>("/entries");
-    setEntries(data);
+    const { data: entries } = await entriesApi.get<Entry[]>("/entries");
+    setEntries(entries);
   };
 
   useEffect(() => {
