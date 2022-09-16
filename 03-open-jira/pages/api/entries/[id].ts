@@ -38,7 +38,7 @@ const getEntry = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { id } = req.query;
 
-  const entry = EntryModel.findById(id);
+  const entry = await EntryModel.findById(id);
   if (!entry) {
     return res.status(400).json({
       message: "No existe entrada con el ID ingresado",

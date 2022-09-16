@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { Button, Box, TextField } from "@mui/material";
-import { v4 } from "uuid";
 
 //* icons *//
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
@@ -10,7 +9,6 @@ import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOu
 import { EntriesContext } from "../../context/EntriesContext";
 
 //* interface *//
-import { Entry } from "../../interfaces";
 import { UIContext } from "../../context";
 
 export const NewEntry = () => {
