@@ -1,19 +1,32 @@
 import type { NextPage } from "next";
 import {
   Button,
+  capitalize,
   Card,
   CardActions,
   CardContent,
   CardHeader,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   Grid,
+  IconButton,
+  Radio,
+  RadioGroup,
   TextField,
 } from "@mui/material";
 
 //* icons *//
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 //* layout *//
 import { Layout } from "../../components/layout";
+
+//* interfaces *//
+import { EntryStatus } from "../../interfaces";
+
+const validStatus: EntryStatus[] = ["pending", "finished", "in-progress"];
 
 const EntryPage: NextPage = () => {
   return (
@@ -30,6 +43,19 @@ const EntryPage: NextPage = () => {
                 autoFocus
                 multiline
               />
+              <FormControl sx={{ marginTop: 2 }}>
+                <FormLabel>Estado:</FormLabel>
+                <RadioGroup row>
+                  {validStatus.map((option) => (
+                    <FormControlLabel
+                      key={option}
+                      value={option}
+                      control={<Radio />}
+                      label={capitalize(option)}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
             </CardContent>
             <CardActions>
               <Button
@@ -43,6 +69,17 @@ const EntryPage: NextPage = () => {
           </Card>
         </Grid>
       </Grid>
+      <IconButton
+        sx={{
+          position: "fixed",
+          bottom: 30,
+          right: 50,
+          backgroundColor: "#a00",
+          padding: 2,
+        }}
+      >
+        <DeleteOutlineOutlinedIcon />
+      </IconButton>
     </Layout>
   );
 };
