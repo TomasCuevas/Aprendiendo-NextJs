@@ -16,21 +16,33 @@ export default function handler(
     case "GET":
       return getEntries(res);
 
+    case "POST":
+      return addEntry(req, res);
+
     default:
       return res.status(400).json({ message: "Endpoint no existe" });
   }
 }
 
 const getEntries = async (res: NextApiResponse<Data>) => {
-  try {
-    await db.connect();
+  await db.connect();
 
-    const entries = await EntryModel.find().sort({
-      createdAt: "ascending",
-    });
+  const entries = await EntryModel.find().sort({
+    createdAt: "ascending",
+  });
 
-    return res.status(200).json(entries);
-  } catch (error) {
-    console.log(error);
-  }
+  return res.status(200).json(entries);
+};
+
+const addEntry = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { description = "" } = req.body;
+  const newEntry = new EntryModel({
+    description,
+    createdAt: Number(Date.now()),
+  });
+
+  await db.connect();
+  await newEntry.save();
+
+  return res.status(201).json(newEntry);
 };
