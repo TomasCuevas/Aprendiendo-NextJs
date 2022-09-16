@@ -1,5 +1,7 @@
 import { ChangeEvent, useMemo, useState } from "react";
+import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
+import mongoose, { isValidObjectId } from "mongoose";
 import {
   Button,
   capitalize,
@@ -27,9 +29,11 @@ import { Layout } from "../../components/layout";
 //* interfaces *//
 import { EntryStatus } from "../../interfaces";
 
+interface EntryPageProps {}
+
 const validStatus: EntryStatus[] = ["pending", "finished", "in-progress"];
 
-const EntryPage: NextPage = () => {
+const EntryPage: NextPage<EntryPageProps> = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [status, setStatus] = useState<EntryStatus>("pending");
   const [touched, setTouched] = useState<boolean>(false);
@@ -112,6 +116,26 @@ const EntryPage: NextPage = () => {
       </IconButton>
     </Layout>
   );
+};
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { id } = params as { id: string };
+
+  if (!isValidObjectId(id)) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default EntryPage;
