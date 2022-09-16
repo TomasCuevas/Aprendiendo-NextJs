@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import type { NextPage } from "next";
 import {
   Button,
@@ -34,6 +34,11 @@ const EntryPage: NextPage = () => {
   const [status, setStatus] = useState<EntryStatus>("pending");
   const [touched, setTouched] = useState<boolean>(false);
 
+  const isValid = useMemo(
+    () => !(inputValue.length < 1 && touched),
+    [inputValue, touched]
+  );
+
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
@@ -41,6 +46,8 @@ const EntryPage: NextPage = () => {
   const onStatusChanges = (event: ChangeEvent<HTMLInputElement>) => {
     setStatus(event.target.value as EntryStatus);
   };
+
+  const onSave = () => {};
 
   return (
     <Layout>
@@ -60,6 +67,9 @@ const EntryPage: NextPage = () => {
                 multiline
                 value={inputValue}
                 onChange={onInputChange}
+                helperText={isValid && "Ingrese un valor"}
+                onBlur={() => setTouched(true)}
+                error={isValid}
               />
               <FormControl sx={{ marginTop: 2 }}>
                 <FormLabel>Estado:</FormLabel>
@@ -80,6 +90,8 @@ const EntryPage: NextPage = () => {
                 startIcon={<SaveOutlinedIcon />}
                 variant="contained"
                 fullWidth
+                onClick={onSave}
+                disabled={isValid}
               >
                 Save
               </Button>
