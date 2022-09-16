@@ -22,6 +22,9 @@ export default function handler(
   }
 
   switch (req.method) {
+    case "GET":
+      return getEntry(req, res);
+
     case "PUT":
       return updateEntry(req, res);
 
@@ -29,6 +32,21 @@ export default function handler(
       return res.status(400).json({ message: "Endpoint no existe" });
   }
 }
+
+const getEntry = async (req: NextApiRequest, res: NextApiResponse) => {
+  await db.connect();
+
+  const { id } = req.query;
+
+  const entry = EntryModel.findById(id);
+  if (!entry) {
+    return res.status(400).json({
+      message: "No existe entrada con el ID ingresado",
+    });
+  }
+
+  return res.status(200).json(entry);
+};
 
 const updateEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await db.connect();
