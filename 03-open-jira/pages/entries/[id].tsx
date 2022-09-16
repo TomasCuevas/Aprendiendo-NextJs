@@ -1,3 +1,4 @@
+import { ChangeEvent, useState } from "react";
 import type { NextPage } from "next";
 import {
   Button,
@@ -29,12 +30,27 @@ import { EntryStatus } from "../../interfaces";
 const validStatus: EntryStatus[] = ["pending", "finished", "in-progress"];
 
 const EntryPage: NextPage = () => {
+  const [inputValue, setInputValue] = useState<string>("");
+  const [status, setStatus] = useState<EntryStatus>("pending");
+  const [touched, setTouched] = useState<boolean>(false);
+
+  const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const onStatusChanges = (event: ChangeEvent<HTMLInputElement>) => {
+    setStatus(event.target.value as EntryStatus);
+  };
+
   return (
     <Layout>
       <Grid container justifyContent="center" sx={{ marginTop: 2 }}>
         <Grid item xs={12} sm={8} md={6}>
           <Card>
-            <CardHeader title="Entrada:" subheader={`Creada hace: ...`} />
+            <CardHeader
+              title={`Entrada: ${inputValue}`}
+              subheader={`Creada hace: ...`}
+            />
             <CardContent>
               <TextField
                 sx={{ marginTop: 2, marginBotton: 1 }}
@@ -42,10 +58,12 @@ const EntryPage: NextPage = () => {
                 placeholder="Nueva entrada"
                 autoFocus
                 multiline
+                value={inputValue}
+                onChange={onInputChange}
               />
               <FormControl sx={{ marginTop: 2 }}>
                 <FormLabel>Estado:</FormLabel>
-                <RadioGroup row>
+                <RadioGroup row onChange={onStatusChanges} value={status}>
                   {validStatus.map((option) => (
                     <FormControlLabel
                       key={option}
