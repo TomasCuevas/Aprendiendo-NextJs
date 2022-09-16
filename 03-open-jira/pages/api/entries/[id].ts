@@ -48,15 +48,20 @@ const updateEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     status = entryToUpdate.status,
   } = req.body;
 
-  const updatedEntry = await EntryModel.findByIdAndUpdate(
-    id,
-    {
-      description,
-      status,
-    },
-    { runValidators: true, new: true }
-  );
-  updatedEntry?.save();
-
-  res.status(201).json(updatedEntry!);
+  try {
+    const updatedEntry = await EntryModel.findByIdAndUpdate(
+      id,
+      {
+        description,
+        status,
+      },
+      { runValidators: true, new: true }
+    );
+    res.status(201).json(updatedEntry!);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      message: "Bad request!",
+    });
+  }
 };
