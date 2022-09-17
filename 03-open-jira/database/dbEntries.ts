@@ -14,5 +14,5 @@ export const getEntryById = async (id: string): Promise<IEntry | null> => {
     return null;
   }
 
-  return entry;
+  return JSON.parse(JSON.stringify(entry));
 };

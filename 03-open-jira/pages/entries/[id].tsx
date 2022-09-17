@@ -36,9 +36,9 @@ interface EntryPageProps {
 
 const validStatus: EntryStatus[] = ["pending", "finished", "in-progress"];
 
-const EntryPage: NextPage<EntryPageProps> = () => {
-  const [inputValue, setInputValue] = useState<string>("");
-  const [status, setStatus] = useState<EntryStatus>("pending");
+const EntryPage: NextPage<EntryPageProps> = ({ entry }) => {
+  const [inputValue, setInputValue] = useState<string>(entry.description);
+  const [status, setStatus] = useState<EntryStatus>(entry.status);
   const [touched, setTouched] = useState<boolean>(false);
 
   const isInvalid = useMemo(
@@ -56,16 +56,14 @@ const EntryPage: NextPage<EntryPageProps> = () => {
 
   const onSave = () => {};
 
-  console.log(isInvalid);
-
   return (
-    <Layout>
+    <Layout title={`${inputValue.substring(0, 25)}...`}>
       <Grid container justifyContent="center" sx={{ marginTop: 2 }}>
         <Grid item xs={12} sm={8} md={6}>
           <Card>
             <CardHeader
               title={`Entrada: ${inputValue}`}
-              subheader={`Creada hace: ...`}
+              subheader={`Creada hace: ${entry.createdAt}`}
             />
             <CardContent>
               <TextField
