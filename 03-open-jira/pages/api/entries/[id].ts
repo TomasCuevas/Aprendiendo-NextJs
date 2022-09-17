@@ -7,6 +7,9 @@ type Data =
   | {
       message: string;
     }
+  | {
+      ok: boolean;
+    }
   | IEntry;
 
 export default function handler(
@@ -28,12 +31,15 @@ export default function handler(
     case "PUT":
       return updateEntry(req, res);
 
+    case "DELETE":
+      return deleteEntry(req, res);
+
     default:
       return res.status(400).json({ message: "Endpoint no existe" });
   }
 }
 
-const getEntry = async (req: NextApiRequest, res: NextApiResponse) => {
+const getEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await db.connect();
 
   const { id } = req.query;
@@ -54,7 +60,6 @@ const updateEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { id } = req.query;
 
   const entryToUpdate = await EntryModel.findById(id);
-
   if (!entryToUpdate) {
     return res.status(400).json({
       message: "No existe entrada con el ID ingresado.",
@@ -75,11 +80,36 @@ const updateEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       },
       { runValidators: true, new: true }
     );
+
     res.status(201).json(updatedEntry!);
   } catch (error) {
     console.error(error);
     res.status(400).json({
       message: "Bad request!",
+    });
+  }
+};
+
+const deleteEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  await db.connect();
+
+  const { id } = req.query;
+
+  const entryToDelete = await EntryModel.findById(id);
+  if (!entryToDelete) {
+    return res.status(400).json({
+      message: "No existe entrada con el ID ingresado.",
+    });
+  }
+
+  try {
+    await EntryModel.findByIdAndDelete(id);
+
+    res.status(200).json({ ok: true });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      ok: false,
     });
   }
 };

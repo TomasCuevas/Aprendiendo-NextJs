@@ -11,6 +11,7 @@ import { entriesApi } from "../api";
 interface ContextProps {
   entries: Entry[];
   addNewEntry: (description: string) => void;
+  entryDeleted: (id: string) => Promise<boolean>;
   entryUpdated: (entryToUpdated: Entry, showSnackbar?: boolean) => void;
 }
 
@@ -19,18 +20,11 @@ export const EntriesContext = createContext({} as ContextProps);
 //* PROVIDER *//
 //* PROVIDER *//
 
-const ENTRIES_INITIAL_STATE: ContextProps = {
-  entries: [],
-  addNewEntry: () => {},
-  entryUpdated: () => {},
-};
-
 export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [entries, setEntries] = useState<Entry[]>(
-    ENTRIES_INITIAL_STATE.entries
-  );
+  const [entries, setEntries] = useState<Entry[]>([]);
   const { enqueueSnackbar } = useSnackbar();
 
+  // add
   const addNewEntry = async (description: string) => {
     const { data: newEntry } = await entriesApi.post<Entry>("/entries", {
       description,
@@ -38,6 +32,7 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setEntries((prevEntries) => [...prevEntries, newEntry]);
   };
 
+  // update
   const entryUpdated = async (entryToUpdated: Entry, showSnackbar = false) => {
     const { data: entryUpdated } = await entriesApi.put<Entry>(
       `/entries/${entryToUpdated._id}`,
@@ -63,6 +58,29 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setEntries(newEntries);
   };
 
+  // delete
+  const entryDeleted = async (id: string): Promise<boolean> => {
+    try {
+      const { data } = await entriesApi.delete(`/entries/${id}`);
+
+      const newEntries = entries.filter((entry) => entry._id !== id);
+      setEntries(newEntries);
+
+      return true;
+    } catch (error) {
+      enqueueSnackbar("Error al eliminar", {
+        variant: "error",
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+      return false;
+    }
+  };
+
+  // refresh
   const refreshEntries = async () => {
     const { data: entries } = await entriesApi.get<Entry[]>("/entries");
     setEntries(entries);
@@ -80,6 +98,7 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
         // methods
         addNewEntry,
+        entryDeleted,
         entryUpdated,
       }}
     >

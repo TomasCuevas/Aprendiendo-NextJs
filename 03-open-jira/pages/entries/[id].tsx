@@ -33,6 +33,7 @@ import { Entry, EntryStatus } from "../../interfaces";
 
 //* context *//
 import { EntriesContext } from "../../context/EntriesContext";
+import { useRouter } from "next/router";
 
 interface EntryPageProps {
   entry: Entry;
@@ -41,10 +42,11 @@ interface EntryPageProps {
 const validStatus: EntryStatus[] = ["pending", "in-progress", "finished"];
 
 const EntryPage: NextPage<EntryPageProps> = ({ entry }) => {
-  const { entryUpdated } = useContext(EntriesContext);
+  const { entryUpdated, entryDeleted } = useContext(EntriesContext);
   const [inputValue, setInputValue] = useState<string>(entry.description);
   const [status, setStatus] = useState<EntryStatus>(entry.status);
   const [touched, setTouched] = useState<boolean>(false);
+  const router = useRouter();
 
   const isInvalid = useMemo(
     () => inputValue.trim().length < 1 && touched,
@@ -69,6 +71,11 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry }) => {
     };
 
     await entryUpdated(entryToUpdate, true);
+  };
+
+  const onDelete = async () => {
+    const response = await entryDeleted(entry._id);
+    if (response) router.replace("/");
   };
 
   return (
@@ -122,12 +129,13 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry }) => {
         </Grid>
       </Grid>
       <IconButton
+        onClick={onDelete}
         sx={{
           position: "fixed",
-          bottom: 30,
-          right: 50,
+          bottom: 80,
+          right: 100,
           backgroundColor: "#a00",
-          padding: 2,
+          padding: "25px",
         }}
       >
         <DeleteOutlineOutlinedIcon />
