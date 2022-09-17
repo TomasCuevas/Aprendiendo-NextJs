@@ -1,7 +1,6 @@
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useMemo, useState, useContext } from "react";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
-import mongoose, { isValidObjectId } from "mongoose";
 import {
   Button,
   capitalize,
@@ -19,6 +18,9 @@ import {
   TextField,
 } from "@mui/material";
 
+//* database helper *//
+import { getEntryById } from "../../database/dbEntries";
+
 //* icons *//
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -28,21 +30,24 @@ import { Layout } from "../../components/layout";
 
 //* interfaces *//
 import { Entry, EntryStatus } from "../../interfaces";
-import { getEntryById } from "../../database/dbEntries";
+
+//* context *//
+import { EntriesContext } from "../../context/EntriesContext";
 
 interface EntryPageProps {
   entry: Entry;
 }
 
-const validStatus: EntryStatus[] = ["pending", "finished", "in-progress"];
+const validStatus: EntryStatus[] = ["pending", "in-progress", "finished"];
 
 const EntryPage: NextPage<EntryPageProps> = ({ entry }) => {
+  const { entryUpdated } = useContext(EntriesContext);
   const [inputValue, setInputValue] = useState<string>(entry.description);
   const [status, setStatus] = useState<EntryStatus>(entry.status);
   const [touched, setTouched] = useState<boolean>(false);
 
   const isInvalid = useMemo(
-    () => inputValue.length < 1 && touched,
+    () => inputValue.trim().length < 1 && touched,
     [inputValue, touched]
   );
 
@@ -54,7 +59,17 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry }) => {
     setStatus(event.target.value as EntryStatus);
   };
 
-  const onSave = () => {};
+  const onSave = async () => {
+    if (inputValue.trim().length < 1) return;
+
+    const entryToUpdate: Entry = {
+      ...entry,
+      description: inputValue,
+      status: status,
+    };
+
+    await entryUpdated(entryToUpdate, true);
+  };
 
   return (
     <Layout title={`${inputValue.substring(0, 25)}...`}>
@@ -98,7 +113,7 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry }) => {
                 variant="contained"
                 fullWidth
                 onClick={onSave}
-                disabled={inputValue.length < 1}
+                disabled={inputValue.trim().length < 1}
               >
                 Save
               </Button>

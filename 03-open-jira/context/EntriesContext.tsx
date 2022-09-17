@@ -1,4 +1,5 @@
 import { useState, createContext, PropsWithChildren, useEffect } from "react";
+import { useSnackbar } from "notistack";
 
 //* interfaces *//
 import { Entry } from "../interfaces";
@@ -10,7 +11,7 @@ import { entriesApi } from "../api";
 interface ContextProps {
   entries: Entry[];
   addNewEntry: (description: string) => void;
-  entryUpdated: (entryToUpdated: Entry) => void;
+  entryUpdated: (entryToUpdated: Entry, showSnackbar?: boolean) => void;
 }
 
 export const EntriesContext = createContext({} as ContextProps);
@@ -28,6 +29,7 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [entries, setEntries] = useState<Entry[]>(
     ENTRIES_INITIAL_STATE.entries
   );
+  const { enqueueSnackbar } = useSnackbar();
 
   const addNewEntry = async (description: string) => {
     const { data: newEntry } = await entriesApi.post<Entry>("/entries", {
@@ -36,7 +38,7 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setEntries((prevEntries) => [...prevEntries, newEntry]);
   };
 
-  const entryUpdated = async (entryToUpdated: Entry) => {
+  const entryUpdated = async (entryToUpdated: Entry, showSnackbar = false) => {
     const { data: entryUpdated } = await entriesApi.put<Entry>(
       `/entries/${entryToUpdated._id}`,
       { description: entryToUpdated.description, status: entryToUpdated.status }
@@ -46,6 +48,17 @@ export const EntriesProvider: React.FC<PropsWithChildren> = ({ children }) => {
       if (entry._id === entryUpdated._id) entry = entryUpdated;
       return entry;
     });
+
+    if (showSnackbar) {
+      enqueueSnackbar("Entrada actualizada", {
+        variant: "success",
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
+    }
 
     setEntries(newEntries);
   };
