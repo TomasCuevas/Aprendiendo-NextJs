@@ -27,9 +27,12 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import { Layout } from "../../components/layout";
 
 //* interfaces *//
-import { EntryStatus } from "../../interfaces";
+import { Entry, EntryStatus } from "../../interfaces";
+import { getEntryById } from "../../database/dbEntries";
 
-interface EntryPageProps {}
+interface EntryPageProps {
+  entry: Entry;
+}
 
 const validStatus: EntryStatus[] = ["pending", "finished", "in-progress"];
 
@@ -38,8 +41,8 @@ const EntryPage: NextPage<EntryPageProps> = () => {
   const [status, setStatus] = useState<EntryStatus>("pending");
   const [touched, setTouched] = useState<boolean>(false);
 
-  const isValid = useMemo(
-    () => !(inputValue.length < 1 && touched),
+  const isInvalid = useMemo(
+    () => inputValue.length < 1 && touched,
     [inputValue, touched]
   );
 
@@ -52,6 +55,8 @@ const EntryPage: NextPage<EntryPageProps> = () => {
   };
 
   const onSave = () => {};
+
+  console.log(isInvalid);
 
   return (
     <Layout>
@@ -71,9 +76,9 @@ const EntryPage: NextPage<EntryPageProps> = () => {
                 multiline
                 value={inputValue}
                 onChange={onInputChange}
-                helperText={isValid && "Ingrese un valor"}
+                helperText={isInvalid && "Ingrese un valor"}
                 onBlur={() => setTouched(true)}
-                error={isValid}
+                error={isInvalid}
               />
               <FormControl sx={{ marginTop: 2 }}>
                 <FormLabel>Estado:</FormLabel>
@@ -95,7 +100,7 @@ const EntryPage: NextPage<EntryPageProps> = () => {
                 variant="contained"
                 fullWidth
                 onClick={onSave}
-                disabled={isValid}
+                disabled={inputValue.length < 1}
               >
                 Save
               </Button>
@@ -124,7 +129,9 @@ const EntryPage: NextPage<EntryPageProps> = () => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { id } = params as { id: string };
 
-  if (!isValidObjectId(id)) {
+  const entry = await getEntryById(id);
+
+  if (!entry) {
     return {
       redirect: {
         destination: "/",
@@ -134,7 +141,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
 
   return {
-    props: {},
+    props: {
+      entry,
+    },
   };
 };
 
