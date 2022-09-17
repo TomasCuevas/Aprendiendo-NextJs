@@ -8,6 +8,9 @@ import {
   CardContent,
 } from "@mui/material";
 
+//* utils *//
+import { getFormatDistanceToNow } from "../../utils";
+
 //* context *//
 import { UIContext } from "../../context";
 
@@ -52,7 +55,9 @@ export const EntryCard = ({ entry }: EntryCardProps) => {
             paddingRight: "15px",
           }}
         >
-          <Typography variant="body2">hace 30 minutos</Typography>
+          <Typography variant="body2">
+            {getFormatDistanceToNow(entry.createdAt)}
+          </Typography>
         </CardActions>
       </CardActionArea>
     </Card>

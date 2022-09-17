@@ -1,5 +1,6 @@
 import { ChangeEvent, useMemo, useState, useContext } from "react";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import {
   Button,
@@ -18,6 +19,9 @@ import {
   TextField,
 } from "@mui/material";
 
+//* utils *//
+import { getFormatDistanceToNow } from "../../utils";
+
 //* database helper *//
 import { getEntryById } from "../../database/dbEntries";
 
@@ -33,7 +37,6 @@ import { Entry, EntryStatus } from "../../interfaces";
 
 //* context *//
 import { EntriesContext } from "../../context/EntriesContext";
-import { useRouter } from "next/router";
 
 interface EntryPageProps {
   entry: Entry;
@@ -85,7 +88,9 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry }) => {
           <Card>
             <CardHeader
               title={`Entrada: ${inputValue}`}
-              subheader={`Creada hace: ${entry.createdAt}`}
+              subheader={`Creada hace: ${getFormatDistanceToNow(
+                entry.createdAt
+              )}`}
             />
             <CardContent>
               <TextField
