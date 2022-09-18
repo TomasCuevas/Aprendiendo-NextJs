@@ -10,7 +10,9 @@ interface LayoutProps {
 export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <Head></Head>
+      <Head>
+        <title>Cookie Master</title>
+      </Head>
       <nav>
         <Navbar />
       </nav>
