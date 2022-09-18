@@ -4,11 +4,13 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { darkTheme, lightTheme } from "../theme";
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps, ...rest }: AppProps) {
-  console.log(rest);
+interface MyAppProps extends AppProps {
+  theme: string;
+}
 
+function MyApp({ Component, pageProps, theme }: MyAppProps) {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
       <CssBaseline />
       <Component {...pageProps} />
     </ThemeProvider>
