@@ -1,4 +1,5 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { GetServerSideProps, NextPage } from "next";
 import {
   Card,
   CardContent,
@@ -13,8 +14,13 @@ import Cookies from "js-cookie";
 //* layout *//
 import { Layout } from "../components/layouts";
 
-const ThemeChangerPage = () => {
-  const [currentTheme, setCurrentTheme] = useState("dark");
+interface ThemeChangerPageProps {
+  theme: string;
+  name: string;
+}
+
+const ThemeChangerPage: NextPage<ThemeChangerPageProps> = ({ theme }) => {
+  const [currentTheme, setCurrentTheme] = useState(theme);
 
   const onChangeTheme = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedTheme = event.target.value;
@@ -44,6 +50,16 @@ const ThemeChangerPage = () => {
       </Card>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { theme = "dark" } = req.cookies;
+
+  return {
+    props: {
+      theme,
+    },
+  };
 };
 
 export default ThemeChangerPage;
