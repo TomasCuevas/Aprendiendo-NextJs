@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import {
+  Button,
   Card,
   CardContent,
   FormControl,
@@ -10,6 +11,7 @@ import {
   RadioGroup,
 } from "@mui/material";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 //* layout *//
 import { Layout } from "../components/layouts";
@@ -31,6 +33,11 @@ const ThemeChangerPage: NextPage<ThemeChangerPageProps> = ({ theme }) => {
     Cookies.set("theme", selectedTheme);
   };
 
+  const onClick = async () => {
+    const { data } = await axios.get("/api/hello");
+    console.log(data);
+  };
+
   return (
     <Layout>
       <Card>
@@ -46,6 +53,8 @@ const ThemeChangerPage: NextPage<ThemeChangerPageProps> = ({ theme }) => {
               <FormControlLabel value="dark" control={<Radio />} label="dark" />
             </RadioGroup>
           </FormControl>
+
+          <Button onClick={onClick}>Solicitud</Button>
         </CardContent>
       </Card>
     </Layout>
