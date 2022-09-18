@@ -18,7 +18,6 @@ import { Layout } from "../components/layouts";
 
 interface ThemeChangerPageProps {
   theme: string;
-  name: string;
 }
 
 const ThemeChangerPage: NextPage<ThemeChangerPageProps> = ({ theme }) => {
@@ -64,9 +63,11 @@ const ThemeChangerPage: NextPage<ThemeChangerPageProps> = ({ theme }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { theme = "dark" } = req.cookies;
 
+  const validThemes = ["light", "dark"];
+
   return {
     props: {
-      theme,
+      theme: validThemes.includes(theme) ? theme : "dark",
     },
   };
 };
