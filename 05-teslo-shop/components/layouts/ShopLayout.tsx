@@ -1,5 +1,8 @@
 import Head from "next/head";
 
+//* components *//
+import { Navbar } from "../ui";
+
 interface ShopLayoutProps {
   children: React.ReactNode;
   title: string;
@@ -23,7 +26,9 @@ export const ShopLayout = ({
         {imageFullUrl && <meta name="og:image" content={imageFullUrl} />}
       </Head>
 
-      <nav></nav>
+      <nav>
+        <Navbar />
+      </nav>
 
       <main
         style={{ margin: "80px auto", maxWidth: "1440px", padding: "0 30px" }}
