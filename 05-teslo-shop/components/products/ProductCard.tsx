@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
+import NextLink from "next/link";
 import {
   Typography,
   Grid,
@@ -21,20 +22,22 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Grid item xs={6} sm={4}>
       <Card>
-        <CardActionArea>
-          <CardMedia
-            component="img"
-            image={
-              isHovered
-                ? `products/${product.images[1]}`
-                : `products/${product.images[0]}`
-            }
-            alt={product.title}
-            className="fadeIn"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          />
-        </CardActionArea>
+        <NextLink href="product/slug" passHref prefetch={false}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              image={
+                isHovered
+                  ? `products/${product.images[1]}`
+                  : `products/${product.images[0]}`
+              }
+              alt={product.title}
+              className="fadeIn"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            />
+          </CardActionArea>
+        </NextLink>
       </Card>
 
       <Box sx={{ mt: 1 }} className="fadeIn">
