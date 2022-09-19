@@ -1,12 +1,15 @@
 import { NextPage } from "next";
 import { Grid, Box, Typography, Button, Chip } from "@mui/material";
 
-//* components *//
+//* layout *//
 import { ShopLayout } from "../../components/layouts";
+
+//* components *//
+import { ProductSlideshow } from "../../components/products";
 
 //* data *//
 import { initialData } from "../../database/products";
-import { ProductSlideshow } from "../../components/products";
+import { ItemCounter } from "../../components/ui";
 
 const product = initialData.products[0];
 
@@ -25,6 +28,7 @@ const SlugPage: NextPage = () => {
             <Typography variant="subtitle1">{`$${product.price}`}</Typography>
             <Box sx={{ my: 2 }}>
               <Typography variant="subtitle2">Cantidad</Typography>
+              <ItemCounter />
             </Box>
             <Button color="secondary" className="circular-btn">
               Agregar al Carrito
