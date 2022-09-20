@@ -4,15 +4,19 @@ import NextLink from "next/link";
 import { Box, Button, Grid, Link, TextField, Typography } from "@mui/material";
 import { AuthLayout } from "../../components/layouts";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   return (
-    <AuthLayout title="Ingresar">
+    <AuthLayout title="Registro">
       <Box sx={{ width: 350, padding: "10px 20px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="h1" component="h1">
-              Iniciar Sesion
+              Registro
             </Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField label="Nombre completo" variant="filled" fullWidth />
           </Grid>
 
           <Grid item xs={12}>
@@ -35,13 +39,13 @@ const LoginPage = () => {
               size="large"
               fullWidth
             >
-              Ingrsar
+              Registrarse
             </Button>
           </Grid>
 
           <Grid item xs={12} display="flex" justifyContent="end">
-            <NextLink href="/auth/register" passHref>
-              <Link>No tienes cuenta?</Link>
+            <NextLink href="/auth/login" passHref>
+              <Link>Ya tienes una cuenta?</Link>
             </NextLink>
           </Grid>
         </Grid>
@@ -50,4 +54,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

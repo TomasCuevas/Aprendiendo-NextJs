@@ -11,7 +11,7 @@ export const AuthLayout = ({ children, title }: AuthLayoutProps) => {
   return (
     <>
       <Head>
-        <title></title>
+        <title>{title}</title>
       </Head>
 
       <main>
