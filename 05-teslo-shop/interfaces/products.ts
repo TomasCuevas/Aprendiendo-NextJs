@@ -12,5 +12,5 @@ export interface IProduct {
   gender: "men" | "women" | "kid" | "unisex";
 }
 
-type IValidSizes = "XS" | "S" | "M" | "L" | "XL" | "XXL" | "XXXL";
-type IValidTypes = "shirts" | "pants" | "hoodies" | "hats";
+export type IValidSizes = "XS" | "S" | "M" | "L" | "XL" | "XXL" | "XXXL";
+export type IValidTypes = "shirts" | "pants" | "hoodies" | "hats";

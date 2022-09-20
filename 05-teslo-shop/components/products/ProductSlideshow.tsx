@@ -8,8 +8,6 @@ interface ProductSlideshowProps {
 }
 
 export const ProductSlideshow = ({ images }: ProductSlideshowProps) => {
-  console.log(images);
-
   return (
     <Slide easing="ease" duration={7000} indicators>
       {images.map((image) => {

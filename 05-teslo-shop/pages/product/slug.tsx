@@ -5,7 +5,7 @@ import { Grid, Box, Typography, Button, Chip } from "@mui/material";
 import { ShopLayout } from "../../components/layouts";
 
 //* components *//
-import { ProductSlideshow } from "../../components/products";
+import { ProductSlideshow, SizeSelector } from "../../components/products";
 
 //* data *//
 import { initialData } from "../../database/products";
@@ -29,6 +29,10 @@ const SlugPage: NextPage = () => {
             <Box sx={{ my: 2 }}>
               <Typography variant="subtitle2">Cantidad</Typography>
               <ItemCounter />
+              <SizeSelector
+                // selectedSize={product.sizes[0]}
+                sizes={product.sizes}
+              />
             </Box>
             <Button color="secondary" className="circular-btn">
               Agregar al Carrito
