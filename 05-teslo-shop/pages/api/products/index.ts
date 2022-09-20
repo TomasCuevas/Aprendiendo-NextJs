@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 //* database *//
-import { db, ProductModel } from "../../../database";
+import { db, ProductModel, SHOP_CONTANTS } from "../../../database";
 
 //* interfaces *//
 import { IProduct } from "../../../interfaces";
@@ -24,7 +24,15 @@ export default function handler(
 const getProducts = async (req: NextApiRequest, res: NextApiResponse) => {
   await db.connect();
 
-  const products = await ProductModel.find()
+  const { gender = "all" } = req.query;
+
+  let condition = {};
+
+  if (gender !== "all" && SHOP_CONTANTS.valid_genders.includes(gender)) {
+    condition = { gender };
+  }
+
+  const products = await ProductModel.find(condition)
     .select("title images price inStock slug -_id")
     .lean();
 
