@@ -7,15 +7,11 @@ import { ProductList } from "../components/products";
 //* layout *//
 import { ShopLayout } from "../components/layouts";
 
-import useSWR from "swr";
-const fetcher = (...args: [key: string]) =>
-  fetch(...args).then((res) => res.json());
+//* hooks
+import { useProducts } from "../hooks";
 
 const HomePage: NextPage = () => {
-  const { data, error } = useSWR("/api/products", fetcher);
-
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  const { products, isError, isLoading } = useProducts("/products");
 
   return (
     <ShopLayout
@@ -29,7 +25,7 @@ const HomePage: NextPage = () => {
         Todos los productos
       </Typography>
 
-      <ProductList products={data} />
+      {isLoading ? <h1>Cargando...</h1> : <ProductList products={products} />}
     </ShopLayout>
   );
 };
