@@ -18,6 +18,7 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (
     <Grid item xs={6} sm={4}>
@@ -35,12 +36,16 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               className="fadeIn"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
+              onLoad={() => setIsImageLoaded(true)}
             />
           </CardActionArea>
         </NextLink>
       </Card>
 
-      <Box sx={{ mt: 1 }} className="fadeIn">
+      <Box
+        sx={{ mt: 1, display: isImageLoaded ? "block" : "none" }}
+        className="fadeIn"
+      >
         <Typography fontWeight={700}>{product.title}</Typography>
         <Typography fontWeight={300}>{`$${product.price}`}</Typography>
       </Box>
