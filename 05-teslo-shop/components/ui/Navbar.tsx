@@ -80,7 +80,7 @@ export const Navbar = () => {
           </Link>
         </NextLink>
 
-        <Button onClick={onToggleMenu}>Menu</Button>
+        <Button onClick={() => onToggleMenu(true)}>Menu</Button>
       </Toolbar>
     </AppBar>
   );

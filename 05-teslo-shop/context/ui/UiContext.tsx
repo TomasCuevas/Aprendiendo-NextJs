@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 //* CONTEXT *//
 interface UiContextProps {
   isMenuOpen: boolean;
-  onToggleMenu: () => void;
+  onToggleMenu: (value: boolean) => void;
 }
 
 export const UiContext = createContext({} as UiContextProps);
@@ -16,8 +16,8 @@ interface UiProviderProps {
 export const UiProvider = ({ children }: UiProviderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const onToggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const onToggleMenu = (value: boolean) => {
+    setIsMenuOpen(value);
   };
 
   return (

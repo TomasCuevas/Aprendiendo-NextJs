@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -34,12 +34,20 @@ import {
 import { UiContext } from "../../context";
 
 export const SideMenu = () => {
-  const { isMenuOpen, onToggleMenu } = useContext(UiContext);
   const router = useRouter();
+  const { isMenuOpen, onToggleMenu } = useContext(UiContext);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const navigateTo = (url: string) => {
+  const onSearchTerm = async () => {
+    if (searchTerm.trim().length < 1) return;
+
+    router.push(`/search/${searchTerm}`);
+    await onToggleMenu(false);
+  };
+
+  const navigateTo = async (url: string) => {
     router.push(url);
-    onToggleMenu();
+    await onToggleMenu(false);
   };
 
   return (
@@ -47,17 +55,19 @@ export const SideMenu = () => {
       open={isMenuOpen}
       anchor="right"
       sx={{ backdropFilter: "blur(4px)", transition: "all 0.5s ease-out" }}
-      onClose={onToggleMenu}
+      onClose={() => onToggleMenu(false)}
     >
       <Box sx={{ width: 250, paddingTop: 5 }}>
         <List>
           <ListItem>
             <Input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
               type="text"
               placeholder="Buscar..."
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton aria-label="toggle password visibility">
+                  <IconButton onClick={onSearchTerm}>
                     <SearchOutlined />
                   </IconButton>
                 </InputAdornment>
