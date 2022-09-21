@@ -1,7 +1,9 @@
 import mongoose, { Schema, model, Model } from "mongoose";
+
+//* interface *//
 import { IProduct } from "../../interfaces";
 
-const ProductSchema = new Schema(
+const productSchema = new Schema(
   {
     description: { type: String, required: true },
     images: [{ type: String }],
@@ -47,9 +49,9 @@ const ProductSchema = new Schema(
   }
 );
 
-ProductSchema.index({ title: "text", tags: "text" });
+productSchema.index({ title: "text", tags: "text" });
 
 const Product: Model<IProduct> =
-  mongoose.models.Product || model("products", ProductSchema);
+  mongoose.models.products || model("products", productSchema);
 
 export default Product;

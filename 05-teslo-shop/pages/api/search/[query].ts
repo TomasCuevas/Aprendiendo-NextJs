@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 //* database *//
-import { db, ProductModel } from "../../../database";
+import { db } from "../../../database";
+import { ProductModel } from "../../../database/models";
 
 //* interfaces *//
 import { IProduct } from "../../../interfaces";
@@ -21,7 +22,10 @@ export default function handler(
   }
 }
 
-const searchProduct = async (req: NextApiRequest, res: NextApiResponse) => {
+const searchProduct = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
   let { query = "" } = req.query;
 
   if (query.length < 1) {
@@ -37,6 +41,8 @@ const searchProduct = async (req: NextApiRequest, res: NextApiResponse) => {
   const products = await ProductModel.find({ $text: { $search: query } })
     .select("title images price inStock slug -_id")
     .lean();
+
+  await db.disconnect();
 
   return res.status(200).json(products);
 };

@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 //* database *//
-import { db, ProductModel, SHOP_CONTANTS } from "../../../database";
+import { db, SHOP_CONTANTS } from "../../../database";
+import { ProductModel } from "../../../database/models";
 
 //* interfaces *//
 import { IProduct } from "../../../interfaces";
@@ -21,7 +22,7 @@ export default function handler(
   }
 }
 
-const getProducts = async (req: NextApiRequest, res: NextApiResponse) => {
+const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await db.connect();
 
   const { gender = "all" } = req.query;
@@ -32,11 +33,11 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse) => {
     condition = { gender };
   }
 
+  await db.disconnect();
+
   const products = await ProductModel.find(condition)
     .select("title images price inStock slug -_id")
     .lean();
-
-  await db.disconnect();
 
   return res.status(200).json(products);
 };

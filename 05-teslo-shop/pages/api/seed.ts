@@ -1,5 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { db, ProductModel } from "../../database";
+
+//* database *//
+import { db } from "../../database";
+import { ProductModel } from "../../database/models";
 
 //* seed data *//
 import { initialData as seedData } from "../../database/products";
@@ -24,6 +27,8 @@ export default async function handler(
 
   await ProductModel.deleteMany();
   await ProductModel.insertMany(seedData.products);
+
+  await db.disconnect();
 
   res.status(200).json({ ok: true });
 }

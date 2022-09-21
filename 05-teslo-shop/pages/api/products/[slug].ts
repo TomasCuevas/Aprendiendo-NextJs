@@ -1,5 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { db, ProductModel } from "../../../database";
+
+//* database *//
+import { db } from "../../../database";
+import { ProductModel } from "../../../database/models";
 
 //* interfaces *//
 import { IProduct } from "../../../interfaces";
@@ -19,7 +22,10 @@ export default function handler(
   }
 }
 
-const getProductBySlug = async (req: NextApiRequest, res: NextApiResponse) => {
+const getProductBySlug = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
   await db.connect();
 
   const { slug } = req.query;

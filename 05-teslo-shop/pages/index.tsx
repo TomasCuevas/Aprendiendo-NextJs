@@ -7,10 +7,16 @@ import { ProductList } from "../components/products";
 //* layout *//
 import { ShopLayout } from "../components/layouts";
 
-//* data *//
-import { initialData } from "../database/products";
+import useSWR from "swr";
+const fetcher = (...args: [key: string]) =>
+  fetch(...args).then((res) => res.json());
 
 const HomePage: NextPage = () => {
+  const { data, error } = useSWR("/api/products", fetcher);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
   return (
     <ShopLayout
       title="Teslo-Shop"
@@ -23,7 +29,7 @@ const HomePage: NextPage = () => {
         Todos los productos
       </Typography>
 
-      <ProductList products={initialData.products as any} />
+      <ProductList products={data} />
     </ShopLayout>
   );
 };
