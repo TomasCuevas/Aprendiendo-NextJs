@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { GetServerSideProps } from "next";
+import { GetStaticProps, GetStaticPaths } from "next";
 import { Grid, Box, Typography, Button, Chip } from "@mui/material";
 
 //* database *//
@@ -57,7 +57,20 @@ const SlugPage: NextPage<SlugPageProps> = ({ product }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//* static side generation *//
+//* static side generation *//
+export const getStaticPaths: GetStaticPaths = async () => {
+  const slugs = await dbProducts.getAllProductSlugs();
+
+  return {
+    paths: slugs.map(({ slug }) => ({
+      params: { slug },
+    })),
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug = "" } = params as { slug: string };
   const product = await dbProducts.getProductBySlug(slug);
 
@@ -74,7 +87,30 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     props: {
       product,
     },
+    revalidate: 60 * 60 * 24,
   };
 };
+
+//* server side render *//
+//* server side render *//
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   const { slug = "" } = params as { slug: string };
+//   const product = await dbProducts.getProductBySlug(slug);
+
+//   if (!product) {
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return {
+//     props: {
+//       product,
+//     },
+//   };
+// };
 
 export default SlugPage;

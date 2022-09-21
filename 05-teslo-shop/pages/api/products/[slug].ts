@@ -34,8 +34,6 @@ const getProductBySlug = async (
     .select("title images price inStock slug -_id")
     .lean();
 
-  await db.disconnect();
-
   if (!product) {
     return res.status(404).json({ message: "Producto no encontrado" });
   }

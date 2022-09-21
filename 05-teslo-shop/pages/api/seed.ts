@@ -28,7 +28,5 @@ export default async function handler(
   await ProductModel.deleteMany();
   await ProductModel.insertMany(seedData.products);
 
-  await db.disconnect();
-
   res.status(200).json({ ok: true });
 }

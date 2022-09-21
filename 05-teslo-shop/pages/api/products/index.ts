@@ -33,8 +33,6 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     condition = { gender };
   }
 
-  await db.disconnect();
-
   const products = await ProductModel.find(condition)
     .select("title images price inStock slug -_id")
     .lean();

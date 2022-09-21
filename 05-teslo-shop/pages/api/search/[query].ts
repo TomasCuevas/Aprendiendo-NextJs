@@ -42,7 +42,5 @@ const searchProduct = async (
     .select("title images price inStock slug -_id")
     .lean();
 
-  await db.disconnect();
-
   return res.status(200).json(products);
 };
