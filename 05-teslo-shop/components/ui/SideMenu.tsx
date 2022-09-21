@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 import {
   Box,
   Divider,
@@ -5,12 +8,15 @@ import {
   IconButton,
   Input,
   InputAdornment,
+  Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   ListSubheader,
 } from "@mui/material";
+
+//* icons *//
 import {
   AccountCircleOutlined,
   AdminPanelSettings,
@@ -24,12 +30,24 @@ import {
   VpnKeyOutlined,
 } from "@mui/icons-material";
 
+//* context *//
+import { UiContext } from "../../context";
+
 export const SideMenu = () => {
+  const { isMenuOpen, onToggleMenu } = useContext(UiContext);
+  const router = useRouter();
+
+  const navigateTo = (url: string) => {
+    router.push(url);
+    onToggleMenu();
+  };
+
   return (
     <Drawer
-      open={false}
+      open={isMenuOpen}
       anchor="right"
       sx={{ backdropFilter: "blur(4px)", transition: "all 0.5s ease-out" }}
+      onClose={onToggleMenu}
     >
       <Box sx={{ width: 250, paddingTop: 5 }}>
         <List>
@@ -61,21 +79,33 @@ export const SideMenu = () => {
             <ListItemText primary={"Mis Ordenes"} />
           </ListItem>
 
-          <ListItem button sx={{ display: { xs: "", sm: "none" } }}>
+          <ListItem
+            onClick={() => navigateTo("/category/men")}
+            button
+            sx={{ display: { xs: "", sm: "none" } }}
+          >
             <ListItemIcon>
               <MaleOutlined />
             </ListItemIcon>
             <ListItemText primary={"Hombres"} />
           </ListItem>
 
-          <ListItem button sx={{ display: { xs: "", sm: "none" } }}>
+          <ListItem
+            onClick={() => navigateTo("/category/women")}
+            button
+            sx={{ display: { xs: "", sm: "none" } }}
+          >
             <ListItemIcon>
               <FemaleOutlined />
             </ListItemIcon>
             <ListItemText primary={"Mujeres"} />
           </ListItem>
 
-          <ListItem button sx={{ display: { xs: "", sm: "none" } }}>
+          <ListItem
+            onClick={() => navigateTo("/category/kids")}
+            button
+            sx={{ display: { xs: "", sm: "none" } }}
+          >
             <ListItemIcon>
               <EscalatorWarningOutlined />
             </ListItemIcon>
