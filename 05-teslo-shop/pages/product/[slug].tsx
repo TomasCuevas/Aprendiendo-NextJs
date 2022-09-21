@@ -1,19 +1,25 @@
 import { NextPage } from "next";
+import { GetServerSideProps } from "next";
 import { Grid, Box, Typography, Button, Chip } from "@mui/material";
+
+//* database *//
+import { dbProducts } from "../../database";
 
 //* layout *//
 import { ShopLayout } from "../../components/layouts";
 
 //* components *//
 import { ProductSlideshow, SizeSelector } from "../../components/products";
-
-//* data *//
-import { initialData } from "../../database/products";
 import { ItemCounter } from "../../components/ui";
 
-const product = initialData.products[0];
+//* interfaces *//
+import { IProduct } from "../../interfaces";
 
-const SlugPage: NextPage = () => {
+interface SlugPageProps {
+  product: IProduct;
+}
+
+const SlugPage: NextPage<SlugPageProps> = ({ product }) => {
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -49,6 +55,26 @@ const SlugPage: NextPage = () => {
       </Grid>
     </ShopLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { slug = "" } = params as { slug: string };
+  const product = await dbProducts.getProductBySlug(slug);
+
+  if (!product) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      product,
+    },
+  };
 };
 
 export default SlugPage;

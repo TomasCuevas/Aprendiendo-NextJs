@@ -23,7 +23,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Grid item xs={6} sm={4}>
       <Card>
-        <NextLink href="product/slug" passHref prefetch={false}>
+        <NextLink href={`/product/${product.slug}`} passHref prefetch={false}>
           <CardActionArea>
             <CardMedia
               component="img"
