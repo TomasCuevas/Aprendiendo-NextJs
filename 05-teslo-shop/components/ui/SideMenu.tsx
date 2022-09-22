@@ -34,20 +34,20 @@ import {
 import { UiContext } from "../../context";
 
 export const SideMenu = () => {
-  const router = useRouter();
+  const { push } = useRouter();
   const { isMenuOpen, onToggleMenu } = useContext(UiContext);
   const [searchTerm, setSearchTerm] = useState("");
 
   const onSearchTerm = async () => {
     if (searchTerm.trim().length < 1) return;
 
-    router.push(`/search/${searchTerm}`);
     await onToggleMenu(false);
+    return push(`/search/${searchTerm}`);
   };
 
   const navigateTo = async (url: string) => {
-    router.push(url);
     await onToggleMenu(false);
+    return push(url);
   };
 
   return (
@@ -61,6 +61,7 @@ export const SideMenu = () => {
         <List>
           <ListItem>
             <Input
+              autoFocus
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               type="text"

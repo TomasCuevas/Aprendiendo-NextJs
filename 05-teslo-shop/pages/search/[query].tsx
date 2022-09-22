@@ -31,11 +31,11 @@ const SearchPage: NextPage<SearchPageProps> = ({
       pageDescription="Encuentra los mejores productos en Teslo Shop"
     >
       <Typography variant="h1" component="h1">
-        Buscar un producto
+        Buscar productos
       </Typography>
       {foundProducts ? (
-        <Typography variant="h2" sx={{ mb: 1 }}>
-          {query}
+        <Typography variant="h2" sx={{ mb: 1 }} textTransform="capitalize">
+          Termino: {query}
         </Typography>
       ) : (
         <Box display="flex" gap={1}>
