@@ -15,7 +15,7 @@ export const SizeSelector = ({ selectedSize, sizes }: SizeSelectorProps) => {
         <Button
           key={size}
           size="small"
-          color={selectedSize === size ? "info" : "primary"}
+          color={selectedSize === size ? "primary" : "inherit"}
         >
           {size}
         </Button>

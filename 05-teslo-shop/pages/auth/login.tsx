@@ -30,7 +30,7 @@ const LoginPage = () => {
 
           <Grid item xs={12}>
             <Button
-              color="secondary"
+              color="primary"
               className="circular-btn"
               size="large"
               fullWidth

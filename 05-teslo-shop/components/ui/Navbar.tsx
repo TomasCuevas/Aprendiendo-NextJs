@@ -60,7 +60,10 @@ export const Navbar = () => {
         >
           <NextLink href="/category/men" passHref>
             <Link>
-              <Button color={pathname === "/category/men" ? "info" : "primary"}>
+              <Button
+                sx={{ mx: "2px" }}
+                color={pathname === "/category/men" ? "primary" : "inherit"}
+              >
                 Hombres
               </Button>
             </Link>
@@ -68,7 +71,8 @@ export const Navbar = () => {
           <NextLink href="/category/women" passHref>
             <Link>
               <Button
-                color={pathname === "/category/women" ? "info" : "primary"}
+                sx={{ mx: "2px" }}
+                color={pathname === "/category/women" ? "primary" : "inherit"}
               >
                 Mujeres
               </Button>
@@ -77,7 +81,8 @@ export const Navbar = () => {
           <NextLink href="/category/kids" passHref>
             <Link>
               <Button
-                color={pathname === "/category/kids" ? "info" : "primary"}
+                sx={{ mx: "2px" }}
+                color={pathname === "/category/kids" ? "primary" : "inherit"}
               >
                 Niños
               </Button>

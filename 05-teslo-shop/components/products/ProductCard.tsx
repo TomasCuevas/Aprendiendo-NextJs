@@ -7,6 +7,7 @@ import {
   CardActionArea,
   CardMedia,
   Box,
+  Chip,
 } from "@mui/material";
 
 //* interfaces *//
@@ -25,6 +26,18 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <Card>
         <NextLink href={`/product/${product.slug}`} passHref prefetch={false}>
           <CardActionArea>
+            {product.inStock === 0 && (
+              <Chip
+                color="primary"
+                label="No hay disponibles"
+                sx={{
+                  position: "absolute",
+                  zIndex: 9,
+                  left: "10px",
+                  top: "10px",
+                }}
+              />
+            )}
             <CardMedia
               component="img"
               image={

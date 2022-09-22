@@ -65,7 +65,7 @@ export const CardList = ({ editable = false }: CardListProps) => {
           >
             <Typography variant="subtitle1">{`$${product.price}`}</Typography>
             {editable && (
-              <Button variant="text" color="secondary">
+              <Button variant="text" color="primary">
                 Remover
               </Button>
             )}
