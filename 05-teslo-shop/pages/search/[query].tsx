@@ -1,34 +1,62 @@
+import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import { Typography } from "@mui/material";
 
 //* components *//
 import { ProductList } from "../../components/products";
-import { FullScreenLoading } from "../../components/ui";
 
 //* layout *//
 import { ShopLayout } from "../../components/layouts";
 
-//* hooks
-import { useProducts } from "../../hooks";
+//* database *//
+import { dbProducts } from "../../database";
 
-const SearchPage: NextPage = () => {
-  const { products, isError, isLoading } = useProducts("/products");
+//* interfaces *//
+import { IProduct } from "../../interfaces";
 
+interface SearchPageProps {
+  products: IProduct[];
+}
+
+const SearchPage: NextPage<SearchPageProps> = ({ products }) => {
   return (
     <ShopLayout
       title="Teslo-Shop - Search"
       pageDescription="Encuentra los mejores productos en Teslo Shop"
     >
       <Typography variant="h1" component="h1">
-        Tienda
+        Buscar un producto
       </Typography>
       <Typography variant="h2" sx={{ mb: 1 }}>
-        Todos los productos
+        Todos los productos encontrados
       </Typography>
 
-      {isLoading ? <FullScreenLoading /> : <ProductList products={products} />}
+      <ProductList products={products} />
     </ShopLayout>
   );
+};
+
+//* server side rendering *//
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { query = "" } = params as { query: string };
+
+  if (query.trim().length < 1) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  let products = await dbProducts.getProductsByTerm(query);
+  console.log(products);
+
+  return {
+    props: {
+      products,
+    },
+  };
 };
 
 export default SearchPage;

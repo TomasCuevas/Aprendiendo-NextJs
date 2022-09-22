@@ -49,7 +49,7 @@ const productSchema = new Schema(
   }
 );
 
-productSchema.index({ title: "text", tags: "text" });
+productSchema.index({ title: "text", tags: "text", description: "text" });
 
 const Product: Model<IProduct> =
   mongoose.models.products || model("products", productSchema);
