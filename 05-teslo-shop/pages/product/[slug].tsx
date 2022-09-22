@@ -36,6 +36,17 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
     setTempCartProduct({ ...tempCartProduct, sizes: size });
   };
 
+  const onSelectedQuantity = (add: boolean) => {
+    let quantity = add
+      ? tempCartProduct.quantity + 1
+      : tempCartProduct.quantity - 1;
+
+    if (quantity > tempCartProduct.inStock) quantity = tempCartProduct.inStock;
+    if (quantity < 1) quantity = 1;
+
+    setTempCartProduct({ ...tempCartProduct, quantity });
+  };
+
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -50,7 +61,10 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
             <Typography variant="subtitle1">{`$${product.price}`}</Typography>
             <Box sx={{ my: 2 }}>
               <Typography variant="subtitle2">Cantidad</Typography>
-              <ItemCounter />
+              <ItemCounter
+                modifyCount={onSelectedQuantity}
+                count={tempCartProduct.quantity}
+              />
               <SizeSelector
                 sizes={product.sizes}
                 selectedSize={tempCartProduct.sizes}
