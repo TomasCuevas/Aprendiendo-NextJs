@@ -40,3 +40,11 @@ export const getProductsByTerm = async (term: string): Promise<IProduct[]> => {
 
   return products;
 };
+
+export const getAllProducts = async (): Promise<IProduct[]> => {
+  await db.connect();
+
+  const products = await ProductModel.find().lean();
+
+  return JSON.parse(JSON.stringify(products));
+};
