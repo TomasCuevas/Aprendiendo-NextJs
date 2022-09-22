@@ -62,7 +62,7 @@ export const Navbar = () => {
             <Link>
               <Button
                 sx={{ mx: "2px" }}
-                color={pathname === "/category/men" ? "primary" : "inherit"}
+                color={pathname === "/category/men" ? "primary" : "info"}
               >
                 Hombres
               </Button>
@@ -72,7 +72,7 @@ export const Navbar = () => {
             <Link>
               <Button
                 sx={{ mx: "2px" }}
-                color={pathname === "/category/women" ? "primary" : "inherit"}
+                color={pathname === "/category/women" ? "primary" : "info"}
               >
                 Mujeres
               </Button>
@@ -82,7 +82,7 @@ export const Navbar = () => {
             <Link>
               <Button
                 sx={{ mx: "2px" }}
-                color={pathname === "/category/kids" ? "primary" : "inherit"}
+                color={pathname === "/category/kids" ? "primary" : "info"}
               >
                 Niños
               </Button>
@@ -140,7 +140,9 @@ export const Navbar = () => {
           </Link>
         </NextLink>
 
-        <Button onClick={() => onToggleMenu(true)}>Menu</Button>
+        <Button color="info" onClick={() => onToggleMenu(true)}>
+          Menu
+        </Button>
       </Toolbar>
     </AppBar>
   );

@@ -1,5 +1,5 @@
-import { NextPage } from "next";
-import { GetStaticProps, GetStaticPaths } from "next";
+import { useState } from "react";
+import { NextPage, GetStaticProps, GetStaticPaths } from "next";
 import { Grid, Box, Typography, Button, Chip } from "@mui/material";
 
 //* database *//
@@ -13,13 +13,29 @@ import { ProductSlideshow, SizeSelector } from "../../components/products";
 import { ItemCounter } from "../../components/ui";
 
 //* interfaces *//
-import { IProduct } from "../../interfaces";
+import { ICartProduct, IProduct, IValidSizes } from "../../interfaces";
 
 interface SlugPageProps {
   product: IProduct;
 }
 
-const SlugPage: NextPage<SlugPageProps> = ({ product }) => {
+const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
+  const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+    _id: product._id,
+    gender: product.gender,
+    images: product.images,
+    inStock: product.inStock,
+    price: product.price,
+    quantity: 1,
+    slug: product.slug,
+    title: product.title,
+    sizes: undefined,
+  });
+
+  const onSelectedSize = (size: IValidSizes) => {
+    setTempCartProduct({ ...tempCartProduct, sizes: size });
+  };
+
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -36,13 +52,16 @@ const SlugPage: NextPage<SlugPageProps> = ({ product }) => {
               <Typography variant="subtitle2">Cantidad</Typography>
               <ItemCounter />
               <SizeSelector
-                // selectedSize={product.sizes[0]}
                 sizes={product.sizes}
+                selectedSize={tempCartProduct.sizes}
+                changeSize={onSelectedSize}
               />
             </Box>
             {product.inStock > 0 ? (
               <Button color="secondary" className="circular-btn">
-                Agregar al Carrito
+                {tempCartProduct.sizes
+                  ? "Agregar al Carrito"
+                  : "Seleccione una talla"}
               </Button>
             ) : (
               <Chip
@@ -120,4 +139,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 //   };
 // };
 
-export default SlugPage;
+export default ProductPage;
