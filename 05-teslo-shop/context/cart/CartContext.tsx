@@ -1,7 +1,9 @@
-import { createContext, useState } from "react";
-import { ICartProduct } from "../../interfaces";
+import { createContext, useEffect, useState } from "react";
+import Cookie from "js-cookie";
 
 //* CONTEXT *//
+import { ICartProduct } from "../../interfaces";
+
 interface CartContextProps {
   cart: ICartProduct[];
   onAddProductToCart: (newProduct: ICartProduct) => void;
@@ -15,12 +17,16 @@ interface CartProviderProps {
 }
 
 const CART_INITIAL_STATE: CartContextProps = {
-  cart: [],
+  cart: Cookie.get("cart") ? JSON.parse(Cookie.get("cart")!) : [],
   onAddProductToCart: () => {},
 };
 
 export const CartProvider = ({ children }: CartProviderProps) => {
   const [cart, setCart] = useState<ICartProduct[]>(CART_INITIAL_STATE.cart);
+
+  useEffect(() => {
+    Cookie.set("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const onAddProductToCart = (newProduct: ICartProduct) => {
     let newCart = [...cart];
