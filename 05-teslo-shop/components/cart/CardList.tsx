@@ -21,7 +21,7 @@ interface CardListProps {
 }
 
 export const CardList = ({ editable = false }: CardListProps) => {
-  const { cart, onUpdateCartQuantity } = useContext(CartContext);
+  const { cart, onUpdateCartQuantity, onDeleteCart } = useContext(CartContext);
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
@@ -79,7 +79,11 @@ export const CardList = ({ editable = false }: CardListProps) => {
             >
               <Typography variant="subtitle1">{`$${product.price}`}</Typography>
               {editable && (
-                <Button variant="text" color="primary">
+                <Button
+                  onClick={() => onDeleteCart(product)}
+                  variant="text"
+                  color="secondary"
+                >
                   Remover
                 </Button>
               )}

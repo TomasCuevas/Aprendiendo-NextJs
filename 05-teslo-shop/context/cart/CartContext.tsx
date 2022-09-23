@@ -1,30 +1,29 @@
 import { createContext, useEffect, useState } from "react";
 import Cookie from "js-cookie";
 
-//* CONTEXT *//
 import { ICartProduct } from "../../interfaces";
 
+//* CONTEXT *//
 interface CartContextProps {
   cart: ICartProduct[];
   onAddProductToCart: (newProduct: ICartProduct) => void;
+  onDeleteCart: (product: ICartProduct) => void;
   onUpdateCartQuantity: (add: boolean, product: ICartProduct) => void;
 }
 
 export const CartContext = createContext({} as CartContextProps);
 
 //* PROVIDER *//
+const CART_INITIAL_STATE = Cookie.get("cart")
+  ? JSON.parse(Cookie.get("cart")!)
+  : [];
+
 interface CartProviderProps {
   children: React.ReactNode;
 }
 
-const CART_INITIAL_STATE: CartContextProps = {
-  cart: Cookie.get("cart") ? JSON.parse(Cookie.get("cart")!) : [],
-  onAddProductToCart: () => {},
-  onUpdateCartQuantity: () => {},
-};
-
 export const CartProvider = ({ children }: CartProviderProps) => {
-  const [cart, setCart] = useState<ICartProduct[]>(CART_INITIAL_STATE.cart);
+  const [cart, setCart] = useState<ICartProduct[]>(CART_INITIAL_STATE);
 
   useEffect(() => {
     Cookie.set("cart", JSON.stringify(cart));
@@ -70,6 +69,12 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     setCart([...newCart]);
   };
 
+  const onDeleteCart = (product: ICartProduct) => {
+    let newCart = [...cart];
+
+    setCart(newCart.filter((cartProduct) => cartProduct !== product));
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -78,6 +83,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
         // methods
         onAddProductToCart,
+        onDeleteCart,
         onUpdateCartQuantity,
       }}
     >
