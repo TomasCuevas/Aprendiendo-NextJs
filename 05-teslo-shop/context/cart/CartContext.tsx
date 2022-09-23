@@ -31,9 +31,6 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const onAddProductToCart = (newProduct: ICartProduct) => {
     let newCart = [...cart];
 
-    const productWithSameId = newCart.findIndex(
-      ({ _id, sizes }) => _id === newProduct._id
-    );
     const productWithSameSize = newCart.findIndex(
       ({ _id, sizes }) => _id === newProduct._id && sizes === newProduct.sizes
     );

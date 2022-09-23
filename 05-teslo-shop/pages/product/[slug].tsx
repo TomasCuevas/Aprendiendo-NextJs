@@ -23,7 +23,7 @@ interface SlugPageProps {
 }
 
 const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
-  const { cart, onAddProductToCart } = useContext(CartContext);
+  const { onAddProductToCart } = useContext(CartContext);
 
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,

@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import NextLink from "next/link";
 import {
+  Box,
   Button,
   CardActionArea,
   CardMedia,
@@ -11,24 +13,19 @@ import {
 //* components *//
 import { ItemCounter } from "../ui";
 
-//* data *//
-import { initialData } from "../../database/products";
-import { Box } from "@mui/system";
-
-const productsInCart = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2],
-];
+//* context *//
+import { CartContext } from "../../context";
 
 interface CardListProps {
   editable?: boolean;
 }
 
 export const CardList = ({ editable = false }: CardListProps) => {
+  const { cart } = useContext(CartContext);
+
   return (
     <>
-      {productsInCart.map((product) => (
+      {cart.map((product) => (
         <Grid container spacing={2} sx={{ mb: 1 }} key={product.slug}>
           <Grid item xs={3}>
             <NextLink href="/product/slug" passHref>
@@ -47,12 +44,12 @@ export const CardList = ({ editable = false }: CardListProps) => {
             <Box display="flex" flexDirection="column">
               <Typography variant="body1">{product.title}</Typography>
               <Typography variant="body1">
-                Talla: <strong>M</strong>
+                Talla: <strong>{product.sizes}</strong>
               </Typography>
               {editable ? (
-                <ItemCounter />
+                <ItemCounter count={product.quantity} modifyCount={() => {}} />
               ) : (
-                <Typography variant="subtitle2">3 items</Typography>
+                <Typography variant="subtitle2">{product.quantity}</Typography>
               )}
             </Box>
           </Grid>
