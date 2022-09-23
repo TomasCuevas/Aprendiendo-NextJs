@@ -4,8 +4,13 @@ import Cookie from "js-cookie";
 import { ICartProduct } from "../../interfaces";
 
 //* CONTEXT *//
+//* CONTEXT *//
 interface CartContextProps {
   cart: ICartProduct[];
+  cartCount: number;
+  subtotal: number;
+  taxes: number;
+  total: number;
   onAddProductToCart: (newProduct: ICartProduct) => void;
   onDeleteCart: (product: ICartProduct) => void;
   onUpdateCartQuantity: (add: boolean, product: ICartProduct) => void;
@@ -13,6 +18,7 @@ interface CartContextProps {
 
 export const CartContext = createContext({} as CartContextProps);
 
+//* PROVIDER *//
 //* PROVIDER *//
 const CART_INITIAL_STATE = Cookie.get("cart")
   ? JSON.parse(Cookie.get("cart")!)
@@ -24,10 +30,23 @@ interface CartProviderProps {
 
 export const CartProvider = ({ children }: CartProviderProps) => {
   const [cart, setCart] = useState<ICartProduct[]>(CART_INITIAL_STATE);
+  const [cartCount, setCartCount] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [taxes, setTaxes] = useState(0);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     Cookie.set("cart", JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    setCartCount(cart.reduce((prev, current) => current.quantity + prev, 0));
+    setSubtotal(
+      cart.reduce((prev, current) => current.price * current.quantity + prev, 0)
+    );
+    setTaxes(Number(((subtotal * 15) / 100).toFixed(2)));
+    setTotal(Number((subtotal + taxes).toFixed(2)));
+  }, [cart, subtotal, taxes]);
 
   const onAddProductToCart = (newProduct: ICartProduct) => {
     let newCart = [...cart];
@@ -80,6 +99,10 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       value={{
         // properties
         cart,
+        cartCount,
+        subtotal,
+        taxes,
+        total,
 
         // methods
         onAddProductToCart,
