@@ -1,4 +1,4 @@
-import { IValidSizes, IValidTypes } from "./products";
+import { IValidSizes } from "./products";
 
 export interface ICartProduct {
   _id: string;

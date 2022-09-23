@@ -75,6 +75,7 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
               <ItemCounter
                 modifyCount={onSelectedQuantity}
                 count={tempCartProduct.quantity}
+                product={tempCartProduct}
               />
               <SizeSelector
                 sizes={product.sizes}

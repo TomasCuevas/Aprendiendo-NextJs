@@ -4,19 +4,26 @@ import { Typography, Box, IconButton } from "@mui/material";
 import { RemoveCircleOutline, AddCircleOutline } from "@mui/icons-material";
 
 //* interfaces *//
+import { ICartProduct } from "../../interfaces";
+
 interface ItemCounterProps {
   count: number;
-  modifyCount: (add: boolean) => void;
+  product: ICartProduct;
+  modifyCount: (add: boolean, product: ICartProduct) => void;
 }
 
-export const ItemCounter = ({ modifyCount, count }: ItemCounterProps) => {
+export const ItemCounter = ({
+  modifyCount,
+  count,
+  product,
+}: ItemCounterProps) => {
   return (
     <Box display="flex" alignItems="center">
-      <IconButton onClick={() => modifyCount(false)}>
+      <IconButton onClick={() => modifyCount(false, product)}>
         <RemoveCircleOutline />
       </IconButton>
       <Typography sx={{ width: 40, textAlign: "center" }}>{count}</Typography>
-      <IconButton onClick={() => modifyCount(true)}>
+      <IconButton onClick={() => modifyCount(true, product)}>
         <AddCircleOutline />
       </IconButton>
     </Box>
