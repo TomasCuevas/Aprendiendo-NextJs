@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 //* database *//
 import { db } from "../../../database";
 import { UserModel } from "../../../database/models";
-import { jwt } from "../../../utils";
+import { jwt, validations } from "../../../utils";
 
 type Data =
   | {
@@ -43,6 +43,12 @@ const registerUser = async (
   } = req.body as { email: string; name: string; password: string };
 
   await db.connect();
+
+  if (!validations.isValidEmail(email)) {
+    return res.status(400).json({
+      message: "El correo ingresado, no es un correo valido.",
+    });
+  }
 
   if (password.length < 6) {
     return res.status(400).json({
