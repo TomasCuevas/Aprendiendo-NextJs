@@ -2,10 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 //* database *//
 import { db } from "../../database";
-import { ProductModel } from "../../database/models";
+import { ProductModel, UserModel } from "../../database/models";
 
 //* seed data *//
-import { initialData as seedData } from "../../database/products";
+import { initialData } from "../../database/seed-data";
 
 type Data =
   | {
@@ -25,8 +25,11 @@ export default async function handler(
 
   await db.connect();
 
+  await UserModel.deleteMany();
+  await UserModel.insertMany(initialData.users);
+
   await ProductModel.deleteMany();
-  await ProductModel.insertMany(seedData.products);
+  await ProductModel.insertMany(initialData.products);
 
   res.status(200).json({ ok: true });
 }

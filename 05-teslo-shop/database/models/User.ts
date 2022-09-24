@@ -17,12 +17,11 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true,
-      unique: true,
     },
     role: {
       type: String,
       enum: {
-        values: ["admin", "cliente"],
+        values: ["admin", "client"],
         message: "{VALUE} no es un rol valido",
       },
       default: "client",
