@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 //* database *//
 import { db } from "../../../database";
 import { UserModel } from "../../../database/models";
+
+//* utils *//
 import { jwt, validations } from "../../../utils";
 
 type Data =

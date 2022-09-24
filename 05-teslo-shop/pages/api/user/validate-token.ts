@@ -27,41 +27,43 @@ export default function handler(
 ) {
   switch (req.method) {
     case "POST":
-      return loginUser(req, res);
+      return checkJWT(req, res);
 
     default:
       return res.status(200).json({ message: "Bad request" });
   }
 }
 
-const loginUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const { email = "", password = "" } = req.body;
+const checkJWT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const { token = "" } = req.headers;
+
+  let userId = "";
+
+  try {
+    userId = await jwt.isValidToken(token.toString());
+  } catch (error) {
+    return res.status(401).json({
+      message: "Token de autorizacion no es valido.",
+    });
+  }
 
   await db.connect();
 
-  const user = await UserModel.findOne({ email });
+  const user = await UserModel.findById(userId).lean();
   if (!user) {
     return res.status(400).json({
-      message: "Correo o contraseña no validos.",
+      message: "No existe usuario con el ID ingresado en el token.",
     });
   }
 
-  if (!bcrypt.compareSync(password, user.password!)) {
-    return res.status(400).json({
-      message: "Correo o contraseña no validos.",
-    });
-  }
-
-  const { role, name, _id } = user;
-
-  const token = jwt.signToken(_id, email);
+  const { _id, email, name, role } = user;
 
   return res.status(200).json({
-    token,
+    token: jwt.signToken(_id, email),
     user: {
       email,
-      name,
       role,
+      name,
     },
-  });
+  } as any);
 };
