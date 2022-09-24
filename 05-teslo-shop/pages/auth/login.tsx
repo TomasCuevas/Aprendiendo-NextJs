@@ -5,6 +5,9 @@ import { Box, Button, Grid, Link, TextField, Typography } from "@mui/material";
 //* layout *//
 import { AuthLayout } from "../../components/layouts";
 
+//* utils *//
+import { validations } from "../../utils";
+
 type FormData = {
   email: string;
   password: string;
@@ -38,7 +41,12 @@ const LoginPage = () => {
                 label="Correo electronico"
                 variant="filled"
                 fullWidth
-                {...register("email")}
+                {...register("email", {
+                  required: "Este campo es requerido",
+                  validate: validations.isEmail,
+                })}
+                error={!!errors.email}
+                helperText={errors.email?.message}
               />
             </Grid>
 
@@ -48,7 +56,12 @@ const LoginPage = () => {
                 type="password"
                 variant="filled"
                 fullWidth
-                {...register("password")}
+                {...register("password", {
+                  required: "Este campo es requerido",
+                  minLength: { value: 6, message: "Minimo 6 caracteres" },
+                })}
+                error={!!errors.password}
+                helperText={errors.password?.message}
               />
             </Grid>
 
