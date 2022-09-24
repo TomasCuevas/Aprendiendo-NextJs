@@ -1,0 +1,39 @@
+import mongoose, { Model, model, Schema } from "mongoose";
+
+//* interfaces *//
+import { IUser } from "../../interfaces";
+
+const UserSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    role: {
+      type: String,
+      enum: {
+        values: ["admin", "cliente"],
+        message: "{VALUE} no es un rol valido",
+      },
+      default: "client",
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const User: Model<IUser> = mongoose.models.users || model("users", UserSchema);
+
+export default User;

@@ -5,7 +5,7 @@ import { Grid, Typography } from "@mui/material";
 import { CartContext } from "../../context";
 
 export const OrderSummary = () => {
-  const { cart, cartCount, subtotal, taxes, total } = useContext(CartContext);
+  const { cartCount, subtotal, taxes, total } = useContext(CartContext);
 
   return (
     <Grid container>
@@ -13,7 +13,7 @@ export const OrderSummary = () => {
         <Typography>No. Productos</Typography>
       </Grid>
       <Grid item xs={6} display="flex" justifyContent="end">
-        <Typography>{cartCount} items</Typography>
+        <Typography>{cartCount} productos</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography>Subtotal</Typography>

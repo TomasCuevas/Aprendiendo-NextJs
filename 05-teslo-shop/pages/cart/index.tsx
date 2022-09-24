@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Box,
   Button,
@@ -15,10 +16,15 @@ import { ShopLayout } from "../../components/layouts";
 //* components *//
 import { CardList, OrderSummary } from "../../components/cart";
 
+//* context *//
+import { CartContext } from "../../context";
+
 const CartPage: NextPage = () => {
+  const { cartCount } = useContext(CartContext);
+
   return (
     <ShopLayout
-      title="Carrito - 3"
+      title={`Carrito - ${cartCount} productos`}
       pageDescription="Carrito de compras de la tienda"
     >
       <Typography variant="h1" component="h1">
