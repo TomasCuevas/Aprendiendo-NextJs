@@ -8,6 +8,9 @@ import { AuthLayout } from "../../components/layouts";
 //* utils *//
 import { validations } from "../../utils";
 
+//* api *//
+import { tesloApi } from "../../api";
+
 type FormData = {
   email: string;
   password: string;
@@ -21,8 +24,15 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const onLoginUser = (data: FormData) => {
-    console.log(data);
+  const onLoginUser = async ({ email, password }: FormData) => {
+    try {
+      const { data } = await tesloApi.post("/user/login", { email, password });
+      const { token, user } = data;
+
+      console.log(token, user);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
