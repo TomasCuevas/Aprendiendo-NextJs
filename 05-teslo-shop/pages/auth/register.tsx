@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useRouter } from "next/router";
 import NextLink from "next/link";
 import { useForm } from "react-hook-form";
 import {
@@ -23,6 +24,9 @@ import { validations } from "../../utils";
 //* api *//
 import { tesloApi } from "../../api";
 
+//* context *//
+import { AuthContext } from "../../context";
+
 type FormData = {
   name: string;
   email: string;
@@ -30,7 +34,10 @@ type FormData = {
 };
 
 const RegisterPage = () => {
+  const router = useRouter();
+  const { onRegister } = useContext(AuthContext);
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -40,22 +47,15 @@ const RegisterPage = () => {
   const onRegisterUser = async ({ name, email, password }: FormData) => {
     setShowError(false);
 
-    try {
-      const { data } = await tesloApi.post("/user/register", {
-        name,
-        email,
-        password,
-      });
-      const { token, user } = data;
-
-      console.log(token, user);
-    } catch (error) {
-      console.log(error);
+    const { hasError, message } = await onRegister(name, email, password);
+    if (hasError) {
       setShowError(true);
-      setTimeout(() => {
-        setShowError(false);
-      }, 4000);
+      setErrorMessage(message!);
+      setTimeout(() => setShowError(false), 4000);
+      return;
     }
+
+    router.replace("/");
   };
 
   return (
@@ -69,7 +69,7 @@ const RegisterPage = () => {
               </Typography>
             </Grid>
             <Chip
-              label="Datos invalidos"
+              label={errorMessage}
               color="error"
               icon={<ErrorOutline />}
               className="fadeIn"
