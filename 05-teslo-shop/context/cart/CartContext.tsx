@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 
 import { ICartProduct } from "../../interfaces";
 
@@ -7,6 +7,7 @@ import { ICartProduct } from "../../interfaces";
 //* CONTEXT *//
 interface CartContextProps {
   cart: Cart;
+  shippingAddress?: ShippingAddress;
   onAddProductToCart: (newProduct: ICartProduct) => void;
   onDeleteCart: (product: ICartProduct) => void;
   onUpdateCartQuantity: (add: boolean, product: ICartProduct) => void;
@@ -16,12 +17,34 @@ export const CartContext = createContext({} as CartContextProps);
 
 //* PROVIDER *//
 //* PROVIDER *//
-const CART_INITIAL_STATE = Cookie.get("cart")
-  ? JSON.parse(Cookie.get("cart")!)
+const CART_INITIAL_STATE = Cookies.get("cart")
+  ? JSON.parse(Cookies.get("cart")!)
   : [];
+
+const SHIPPING_ADDRESS_INITIAL_STATE: ShippingAddress = {
+  address: Cookies.get("address") || "",
+  address2: Cookies.get("address2") || "",
+  city: Cookies.get("city") || "",
+  country: Cookies.get("country") || "",
+  firstName: Cookies.get("firstName") || "",
+  lastName: Cookies.get("lastName") || "",
+  phone: Cookies.get("phone") || "",
+  zip: Cookies.get("zip") || "",
+};
 
 interface CartProviderProps {
   children: React.ReactNode;
+}
+
+interface ShippingAddress {
+  address: string;
+  address2: string;
+  city: string;
+  country: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  zip: string;
 }
 
 interface Cart {
@@ -42,9 +65,12 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     taxes: 0,
     total: 0,
   });
+  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>(
+    SHIPPING_ADDRESS_INITIAL_STATE
+  );
 
   useEffect(() => {
-    Cookie.set("cart", JSON.stringify(cart.cartItems));
+    Cookies.set("cart", JSON.stringify(cart.cartItems));
   }, [cart.cartItems]);
 
   useEffect(() => {
@@ -127,6 +153,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       value={{
         // properties
         cart,
+        shippingAddress,
 
         // methods
         onAddProductToCart,

@@ -20,6 +20,19 @@ import { countries, jwt } from "../../utils";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 
+const getAddressFromCookies = (): FormData => {
+  return {
+    firstName: Cookies.get("firstName") || "",
+    lastName: Cookies.get("lastName") || "",
+    address: Cookies.get("address") || "",
+    adress2: Cookies.get("adress2") || "",
+    zip: Cookies.get("zip") || "",
+    city: Cookies.get("city") || "",
+    country: Cookies.get("country") || "",
+    phone: Cookies.get("phone") || "",
+  };
+};
+
 type FormData = {
   firstName: string;
   lastName: string;
@@ -38,16 +51,7 @@ const AddressPage: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    defaultValues: {
-      address: "",
-      adress2: "",
-      city: "",
-      country: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      zip: "",
-    },
+    defaultValues: getAddressFromCookies(),
   });
 
   const onSubmitAddress = (data: FormData) => {
