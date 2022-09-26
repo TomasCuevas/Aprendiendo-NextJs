@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useRouter } from "next/router";
 import tesloApi from "../../api/tesloApi";
 import { IUser } from "../../interfaces";
 
@@ -27,6 +28,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<IUser>();
 
@@ -100,8 +102,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const onLogout = () => {
+    Cookies.remove("token");
+    Cookies.remove("cart");
     setIsLoggedIn(false);
     setUser(undefined);
+    router.reload();
   };
 
   return (
