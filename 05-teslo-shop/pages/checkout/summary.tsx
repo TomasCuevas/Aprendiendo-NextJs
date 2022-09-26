@@ -1,3 +1,4 @@
+import { GetServerSideProps, NextPage } from "next";
 import NextLink from "next/link";
 import {
   Box,
@@ -9,13 +10,15 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import type { NextPage } from "next";
 
 //* layout *//
 import { ShopLayout } from "../../components/layouts";
 
 //* components *//
 import { CardList, OrderSummary } from "../../components/cart";
+
+//* utils *//
+import { jwt } from "../../utils";
 
 const SummaryPage: NextPage = () => {
   return (
@@ -71,6 +74,31 @@ const SummaryPage: NextPage = () => {
       </Grid>
     </ShopLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { token = "" } = req.cookies;
+  let isValidToken = false;
+
+  try {
+    await jwt.isValidToken(token);
+    isValidToken = true;
+  } catch (error) {
+    isValidToken = false;
+  }
+
+  if (!isValidToken) {
+    return {
+      redirect: {
+        destination: "/auth/login?p=/checkout/summary",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default SummaryPage;
