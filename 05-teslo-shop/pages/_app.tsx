@@ -3,7 +3,7 @@ import { SWRConfig } from "swr";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 
 //* providers *//
-import { CartProvider, UiProvider } from "../context";
+import { AuthProvider, CartProvider, UiProvider } from "../context";
 
 //* theme and styles *//
 import { lightTheme } from "../themes";
@@ -17,14 +17,16 @@ function MyApp({ Component, pageProps }: AppProps) {
           fetch(resource, init).then((res) => res.json()),
       }}
     >
-      <CartProvider>
-        <UiProvider>
-          <ThemeProvider theme={lightTheme}>
-            <CssBaseline />
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </UiProvider>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <UiProvider>
+            <ThemeProvider theme={lightTheme}>
+              <CssBaseline />
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </UiProvider>
+        </CartProvider>
+      </AuthProvider>
     </SWRConfig>
   );
 }
