@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react";
+
 import { useRouter } from "next/router";
 import {
   Box,
@@ -53,7 +54,12 @@ const CartPage: NextPage = () => {
               <Divider sx={{ my: 1 }} />
               <OrderSummary />
               <Box sx={{ mt: 3 }}>
-                <Button color="secondary" className="circular-btn" fullWidth>
+                <Button
+                  href="/checkout/address"
+                  color="secondary"
+                  className="circular-btn"
+                  fullWidth
+                >
                   Checkout
                 </Button>
               </Box>
