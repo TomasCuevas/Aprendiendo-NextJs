@@ -35,6 +35,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const validateToken = async () => {
+    if (!Cookies.get("token")) return;
+
     try {
       const { data } = await tesloApi.post("/user/validate-token");
       const { token, user } = data;
