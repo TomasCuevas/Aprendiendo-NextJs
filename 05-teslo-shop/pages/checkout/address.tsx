@@ -159,7 +159,7 @@ const AddressPage: NextPage = () => {
                 helperText={errors.country?.message}
               >
                 {countries.map((contry) => (
-                  <MenuItem key={contry.code} value={contry.code}>
+                  <MenuItem key={contry.code} value={contry.name}>
                     {contry.name}
                   </MenuItem>
                 ))}
