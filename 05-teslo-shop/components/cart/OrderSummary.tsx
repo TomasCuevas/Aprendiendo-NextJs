@@ -5,7 +5,9 @@ import { Grid, Typography } from "@mui/material";
 import { CartContext } from "../../context";
 
 export const OrderSummary = () => {
-  const { cartCount, subtotal, taxes, total } = useContext(CartContext);
+  const {
+    cart: { cartCount, subtotal, taxes, total },
+  } = useContext(CartContext);
 
   return (
     <Grid container>

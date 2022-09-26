@@ -26,7 +26,9 @@ import { CartContext, UiContext } from "../../context";
 
 export const Navbar = () => {
   const { onToggleMenu } = useContext(UiContext);
-  const { cartCount } = useContext(CartContext);
+  const {
+    cart: { cartCount },
+  } = useContext(CartContext);
   const { pathname, push } = useRouter();
 
   const [searchTerm, setSearchTerm] = useState("");

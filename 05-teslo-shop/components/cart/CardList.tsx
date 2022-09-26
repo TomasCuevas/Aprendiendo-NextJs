@@ -21,7 +21,11 @@ interface CardListProps {
 }
 
 export const CardList = ({ editable = false }: CardListProps) => {
-  const { cart, onUpdateCartQuantity, onDeleteCart } = useContext(CartContext);
+  const {
+    cart: { cartItems },
+    onUpdateCartQuantity,
+    onDeleteCart,
+  } = useContext(CartContext);
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
@@ -31,7 +35,7 @@ export const CardList = ({ editable = false }: CardListProps) => {
   return (
     <>
       {hasMounted &&
-        cart.map((product) => (
+        cartItems.map((product) => (
           <Grid
             container
             spacing={2}

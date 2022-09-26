@@ -12,7 +12,7 @@ import { ShopLayout } from "../components/layouts";
 import { useProducts } from "../hooks";
 
 const HomePage: NextPage = () => {
-  const { products, isError, isLoading } = useProducts("/products");
+  const { products, isLoading } = useProducts("/products");
 
   return (
     <ShopLayout
