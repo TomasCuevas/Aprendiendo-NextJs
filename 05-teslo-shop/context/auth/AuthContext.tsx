@@ -1,8 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import axios from "axios";
 import tesloApi from "../../api/tesloApi";
 import { IUser } from "../../interfaces";
-import axios from "axios";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -29,6 +29,24 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<IUser>();
+
+  useEffect(() => {
+    validateToken();
+  }, []);
+
+  const validateToken = async () => {
+    try {
+      const { data } = await tesloApi.post("/user/validate-token");
+      const { token, user } = data;
+
+      Cookies.set("token", token);
+
+      setIsLoggedIn(true);
+      setUser(user);
+    } catch (error) {
+      Cookies.set("token", "");
+    }
+  };
 
   const onLogin = async (email: string, password: string): Promise<boolean> => {
     try {
