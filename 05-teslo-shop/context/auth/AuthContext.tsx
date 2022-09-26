@@ -1,4 +1,6 @@
 import { createContext, useState } from "react";
+import Cookies from "js-cookie";
+import tesloApi from "../../api/tesloApi";
 import { IUser } from "../../interfaces";
 
 //* CONTEXT *//
@@ -6,7 +8,7 @@ import { IUser } from "../../interfaces";
 interface AuthContextProps {
   isLoggedIn: boolean;
   user?: IUser;
-  onLogin: (user: IUser) => void;
+  onLogin: (email: string, password: string) => Promise<boolean>;
   onLogout: () => void;
 }
 
@@ -22,9 +24,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<IUser>();
 
-  const onLogin = (user: IUser) => {
-    setIsLoggedIn(true);
-    setUser(user);
+  const onLogin = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const { data } = await tesloApi.post("/user/login", { email, password });
+      const { token, user } = data;
+
+      Cookies.set("token", token);
+
+      setIsLoggedIn(true);
+      setUser(user);
+
+      return true;
+    } catch (error) {
+      return false;
+    }
   };
 
   const onLogout = () => {
