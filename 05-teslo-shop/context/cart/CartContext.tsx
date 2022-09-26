@@ -8,18 +8,24 @@ import { ICartProduct } from "../../interfaces";
 interface CartContextProps {
   cart: Cart;
   shippingAddress?: ShippingAddress;
-  onAddProductToCart: (newProduct: ICartProduct) => void;
-  onDeleteCart: (product: ICartProduct) => void;
-  onUpdateCartQuantity: (add: boolean, product: ICartProduct) => void;
+  addProductToCart: (newProduct: ICartProduct) => void;
+  deleteCart: (product: ICartProduct) => void;
+  updateAddress: (address: ShippingAddress) => void;
+  updateCartQuantity: (add: boolean, product: ICartProduct) => void;
 }
 
 export const CartContext = createContext({} as CartContextProps);
 
 //* PROVIDER *//
 //* PROVIDER *//
-const CART_INITIAL_STATE = Cookies.get("cart")
-  ? JSON.parse(Cookies.get("cart")!)
-  : [];
+const CART_INITIAL_STATE: Cart = {
+  cartItems: Cookies.get("cart") ? JSON.parse(Cookies.get("cart")!) : [],
+  cartCount: 0,
+  isLoaded: false,
+  subtotal: 0,
+  taxes: 0,
+  total: 0,
+};
 
 const SHIPPING_ADDRESS_INITIAL_STATE: ShippingAddress = {
   address: Cookies.get("address") || "",
@@ -38,7 +44,7 @@ interface CartProviderProps {
 
 interface ShippingAddress {
   address: string;
-  address2: string;
+  address2?: string;
   city: string;
   country: string;
   firstName: string;
@@ -57,14 +63,7 @@ interface Cart {
 }
 
 export const CartProvider = ({ children }: CartProviderProps) => {
-  const [cart, setCart] = useState<Cart>({
-    cartItems: CART_INITIAL_STATE,
-    cartCount: 0,
-    isLoaded: false,
-    subtotal: 0,
-    taxes: 0,
-    total: 0,
-  });
+  const [cart, setCart] = useState<Cart>(CART_INITIAL_STATE);
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>(
     SHIPPING_ADDRESS_INITIAL_STATE
   );
@@ -90,7 +89,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }));
   }, [cart.cartItems, cart.subtotal, cart.taxes]);
 
-  const onAddProductToCart = (newProduct: ICartProduct) => {
+  const addProductToCart = (newProduct: ICartProduct) => {
     let newCart = [...cart.cartItems];
 
     const productIndex = newCart.findIndex(
@@ -114,7 +113,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   };
 
-  const onUpdateCartQuantity = (add: boolean, product: ICartProduct) => {
+  const updateCartQuantity = (add: boolean, product: ICartProduct) => {
     let newCart = [...cart.cartItems];
 
     const productIndex = newCart.findIndex(
@@ -139,13 +138,26 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }));
   };
 
-  const onDeleteCart = (product: ICartProduct) => {
+  const deleteCart = (product: ICartProduct) => {
     let newCart = [...cart.cartItems];
 
     setCart((prev) => ({
       ...prev,
       cartItems: newCart.filter((cartProduct) => cartProduct !== product),
     }));
+  };
+
+  const updateAddress = (address: ShippingAddress) => {
+    Cookies.set("address", address.address);
+    Cookies.set("address2", address.address2 || "");
+    Cookies.set("city", address.city);
+    Cookies.set("country", address.country);
+    Cookies.set("firstName", address.firstName);
+    Cookies.set("lastName", address.lastName);
+    Cookies.set("phone", address.phone);
+    Cookies.set("zip", address.zip);
+
+    setShippingAddress(address);
   };
 
   return (
@@ -156,9 +168,10 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         shippingAddress,
 
         // methods
-        onAddProductToCart,
-        onDeleteCart,
-        onUpdateCartQuantity,
+        addProductToCart,
+        deleteCart,
+        updateAddress,
+        updateCartQuantity,
       }}
     >
       {children}

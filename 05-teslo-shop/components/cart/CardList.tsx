@@ -23,8 +23,8 @@ interface CardListProps {
 export const CardList = ({ editable = false }: CardListProps) => {
   const {
     cart: { cartItems },
-    onUpdateCartQuantity,
-    onDeleteCart,
+    updateCartQuantity,
+    deleteCart,
   } = useContext(CartContext);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -64,7 +64,7 @@ export const CardList = ({ editable = false }: CardListProps) => {
                 {editable ? (
                   <ItemCounter
                     count={product.quantity}
-                    modifyCount={onUpdateCartQuantity}
+                    modifyCount={updateCartQuantity}
                     product={product}
                   />
                 ) : (
@@ -84,7 +84,7 @@ export const CardList = ({ editable = false }: CardListProps) => {
               <Typography variant="subtitle1">{`$${product.price}`}</Typography>
               {editable && (
                 <Button
-                  onClick={() => onDeleteCart(product)}
+                  onClick={() => deleteCart(product)}
                   variant="text"
                   color="secondary"
                 >
