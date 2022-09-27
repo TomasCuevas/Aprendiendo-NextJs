@@ -12,15 +12,18 @@ import {
 } from "@mui/material";
 import type { NextPage } from "next";
 
-//* layout *//
-import { ShopLayout } from "../../components/layouts";
-
-//* components *//
-import { CardList, OrderSummary } from "../../components/cart";
+//* icons *//
 import {
   CreditCardOffOutlined,
   CreditScoreOutlined,
 } from "@mui/icons-material";
+
+//* layout *//
+import { ShopLayout } from "../../components/layouts/ShopLayout";
+
+//* components *//
+import { CardList } from "../../components/cart/CardList";
+import { OrderSummary } from "../../components/cart/OrderSummary";
 
 const OrderPage: NextPage = () => {
   return (

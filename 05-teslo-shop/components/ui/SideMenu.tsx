@@ -31,7 +31,8 @@ import {
 } from "@mui/icons-material";
 
 //* contexts *//
-import { AuthContext, UiContext } from "../../context";
+import { AuthContext } from "../../context/auth/AuthContext";
+import { UiContext } from "../../context/ui/UiContext";
 
 export const SideMenu = () => {
   const { push, asPath } = useRouter();

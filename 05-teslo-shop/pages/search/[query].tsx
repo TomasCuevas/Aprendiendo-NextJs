@@ -3,16 +3,16 @@ import type { NextPage } from "next";
 import { Box, Typography } from "@mui/material";
 
 //* components *//
-import { ProductList } from "../../components/products";
+import { ProductList } from "../../components/products/ProductList";
 
 //* layout *//
-import { ShopLayout } from "../../components/layouts";
+import { ShopLayout } from "../../components/layouts/ShopLayout";
 
 //* database *//
-import { dbProducts } from "../../database";
+import { getProductsByTerm, getAllProducts } from "../../database/dbProducts";
 
 //* interfaces *//
-import { IProduct } from "../../interfaces";
+import { IProduct } from "../../interfaces/products";
 
 interface SearchPageProps {
   foundProducts: boolean;
@@ -66,11 +66,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     };
   }
 
-  let products = await dbProducts.getProductsByTerm(query);
+  let products = await getProductsByTerm(query);
   const foundProducts = products.length > 0;
 
   if (!foundProducts) {
-    products = await dbProducts.getAllProducts();
+    products = await getAllProducts();
   }
 
   return {

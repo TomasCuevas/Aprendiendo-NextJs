@@ -13,16 +13,17 @@ import {
 } from "@mui/material";
 
 //* layout *//
-import { ShopLayout } from "../../components/layouts";
+import { ShopLayout } from "../../components/layouts/ShopLayout";
 
 //* components *//
-import { CardList, OrderSummary } from "../../components/cart";
+import { CardList } from "../../components/cart/CardList";
+import { OrderSummary } from "../../components/cart/OrderSummary";
 
 //* utils *//
-import { jwt } from "../../utils";
+import { isValidToken } from "../../utils/jwt";
 
 //* context *//
-import { CartContext } from "../../context";
+import { CartContext } from "../../context/cart/CartContext";
 
 const SummaryPage: NextPage = () => {
   const {
@@ -97,16 +98,16 @@ const SummaryPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { token = "" } = req.cookies;
-  let isValidToken = false;
+  let verifyToken = false;
 
   try {
-    await jwt.isValidToken(token);
-    isValidToken = true;
+    await isValidToken(token);
+    verifyToken = true;
   } catch (error) {
-    isValidToken = false;
+    verifyToken = false;
   }
 
-  if (!isValidToken) {
+  if (!verifyToken) {
     return {
       redirect: {
         destination: "/auth/login?p=/checkout/summary",

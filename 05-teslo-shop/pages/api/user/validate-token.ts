@@ -1,12 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import bcrypt from "bcryptjs";
 
 //* database *//
-import { db } from "../../../database";
-import { UserModel } from "../../../database/models";
+import { connect } from "../../../database/config";
+import UserModel from "../../../database/models/User";
 
 //* utils *//
-import { jwt } from "../../../utils";
+import { isValidToken, signToken } from "../../../utils/jwt";
 
 type Data =
   | {
@@ -40,14 +39,14 @@ const checkJWT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   let userId = "";
 
   try {
-    userId = await jwt.isValidToken(token.toString());
+    userId = await isValidToken(token.toString());
   } catch (error) {
     return res.status(401).json({
       message: "Token de autorizacion no es valido.",
     });
   }
 
-  await db.connect();
+  await connect();
 
   const user = await UserModel.findById(userId).lean();
   if (!user) {
@@ -59,7 +58,7 @@ const checkJWT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { _id, email, name, role } = user;
 
   return res.status(200).json({
-    token: jwt.signToken(_id, email),
+    token: signToken(_id, email),
     user: {
       email,
       role,

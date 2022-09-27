@@ -2,11 +2,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 
 //* database *//
-import { db } from "../../../database";
-import { UserModel } from "../../../database/models";
+import { connect } from "../../../database/config";
+import UserModel from "../../../database/models/User";
 
 //* utils *//
-import { jwt, validations } from "../../../utils";
+import { signToken } from "../../../utils/jwt";
+import { isValidEmail } from "../../../utils/validations";
 
 type Data =
   | {
@@ -44,9 +45,9 @@ const registerUser = async (
     password = "",
   } = req.body as { email: string; name: string; password: string };
 
-  await db.connect();
+  await connect();
 
-  if (!validations.isValidEmail(email)) {
+  if (!isValidEmail(email)) {
     return res.status(400).json({
       message: "El correo ingresado, no es un correo valido.",
     });
@@ -89,7 +90,7 @@ const registerUser = async (
 
   const { _id, role } = newUser;
 
-  const token = jwt.signToken(_id, email);
+  const token = signToken(_id, email);
 
   return res.status(200).json({
     token,

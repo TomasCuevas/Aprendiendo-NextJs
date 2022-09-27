@@ -3,20 +3,25 @@ import { NextPage, GetStaticProps, GetStaticPaths } from "next";
 import { Grid, Box, Typography, Button, Chip } from "@mui/material";
 
 //* database *//
-import { dbProducts } from "../../database";
+import {
+  getAllProductSlugs,
+  getProductBySlug,
+} from "../../database/dbProducts";
 
 //* layout *//
-import { ShopLayout } from "../../components/layouts";
+import { ShopLayout } from "../../components/layouts/ShopLayout";
 
 //* components *//
-import { ProductSlideshow, SizeSelector } from "../../components/products";
-import { ItemCounter } from "../../components/ui";
+import { ProductSlideshow } from "../../components/products/ProductSlideshow";
+import { SizeSelector } from "../../components/products/SizeSelector";
+import { ItemCounter } from "../../components/ui/ItemCounter";
 
 //* context *//
-import { CartContext } from "../../context";
+import { CartContext } from "../../context/cart/CartContext";
 
 //* interfaces *//
-import { ICartProduct, IProduct, IValidSizes } from "../../interfaces";
+import { ICartProduct } from "../../interfaces/cart";
+import { IValidSizes, IProduct } from "../../interfaces/products";
 
 interface SlugPageProps {
   product: IProduct;
@@ -116,7 +121,7 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
 //* static side generation *//
 //* static side generation *//
 export const getStaticPaths: GetStaticPaths = async () => {
-  const slugs = await dbProducts.getAllProductSlugs();
+  const slugs = await getAllProductSlugs();
 
   return {
     paths: slugs.map(({ slug }) => ({
@@ -128,7 +133,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug = "" } = params as { slug: string };
-  const product = await dbProducts.getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return {

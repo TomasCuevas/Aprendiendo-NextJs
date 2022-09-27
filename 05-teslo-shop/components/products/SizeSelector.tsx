@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 
 //* interfaces *//
-import { IValidSizes } from "../../interfaces";
+import { IValidSizes } from "../../interfaces/products";
 
 interface SizeSelectorProps {
   selectedSize?: IValidSizes;

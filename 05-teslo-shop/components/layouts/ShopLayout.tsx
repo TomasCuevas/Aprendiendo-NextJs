@@ -1,7 +1,8 @@
 import Head from "next/head";
 
 //* components *//
-import { Navbar, SideMenu } from "../ui";
+import { Navbar } from "../ui/Navbar";
+import { SideMenu } from "../ui/SideMenu";
 
 interface ShopLayoutProps {
   children: React.ReactNode;

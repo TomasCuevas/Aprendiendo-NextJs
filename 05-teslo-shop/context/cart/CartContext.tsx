@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-import { ICartProduct } from "../../interfaces";
+import { ICartProduct } from "../../interfaces/cart";
 
 //* CONTEXT *//
 //* CONTEXT *//

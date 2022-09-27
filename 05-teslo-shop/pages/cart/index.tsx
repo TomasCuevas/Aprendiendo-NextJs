@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -10,16 +10,16 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import type { NextPage } from "next";
 
 //* layout *//
-import { ShopLayout } from "../../components/layouts";
+import { ShopLayout } from "../../components/layouts/ShopLayout";
 
 //* components *//
-import { CardList, OrderSummary } from "../../components/cart";
+import { CardList } from "../../components/cart/CardList";
+import { OrderSummary } from "../../components/cart/OrderSummary";
 
 //* context *//
-import { CartContext } from "../../context";
+import { CartContext } from "../../context/cart/CartContext";
 
 const CartPage: NextPage = () => {
   const router = useRouter();

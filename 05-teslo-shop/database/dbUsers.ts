@@ -1,14 +1,14 @@
 import bcrypt from "bcryptjs";
 
 //* database *//
-import { db } from ".";
-import { UserModel } from "./models";
+import { connect } from "./config";
+import UserModel from "./models/User";
 
 export const checkUserEmailPassword = async (
   email: string,
   password: string
 ) => {
-  await db.connect();
+  await connect();
 
   const user = await UserModel.findOne({ email });
   if (!user) return null;

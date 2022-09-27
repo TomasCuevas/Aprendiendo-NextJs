@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 
 //* components *//
-import { ItemCounter } from "../ui";
+import { ItemCounter } from "../ui/ItemCounter";
 
 //* context *//
-import { CartContext } from "../../context";
+import { CartContext } from "../../context/cart/CartContext";
 
 interface CardListProps {
   editable?: boolean;

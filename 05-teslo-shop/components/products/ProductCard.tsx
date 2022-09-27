@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 //* interfaces *//
-import { IProduct } from "../../interfaces";
+import { IProduct } from "../../interfaces/products";
 
 interface ProductCardProps {
   product: IProduct;

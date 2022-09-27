@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Grid, Typography } from "@mui/material";
 
 //* context *//
-import { CartContext } from "../../context";
+import { CartContext } from "../../context/cart/CartContext";
 
 export const OrderSummary = () => {
   const {

@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 //* database *//
-import { db } from "../../../database";
-import { ProductModel } from "../../../database/models";
+import { connect } from "../../../database/config";
+import ProductModel from "../../../database/models/Product";
 
 //* interfaces *//
-import { IProduct } from "../../../interfaces";
+import { IProduct } from "../../../interfaces/products";
 
 type Data = { message: string } | IProduct[] | IProduct;
 
@@ -36,7 +36,7 @@ const searchProduct = async (
 
   query = query.toString().toLowerCase();
 
-  await db.connect();
+  await connect();
 
   const products = await ProductModel.find({ $text: { $search: query } })
     .select("title images price inStock slug -_id")

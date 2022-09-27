@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, Model } from "mongoose";
 
 //* interface *//
-import { IProduct } from "../../interfaces";
+import { IProduct } from "../../interfaces/products";
 
 const productSchema = new Schema(
   {

@@ -2,14 +2,14 @@ import type { NextPage } from "next";
 import { Typography } from "@mui/material";
 
 //* components *//
-import { ProductList } from "../components/products";
-import { FullScreenLoading } from "../components/ui";
+import { ProductList } from "../components/products/ProductList";
+import { FullScreenLoading } from "../components/ui/FullScreenLoading";
 
 //* layout *//
-import { ShopLayout } from "../components/layouts";
+import { ShopLayout } from "../components/layouts/ShopLayout";
 
 //* hooks
-import { useProducts } from "../hooks";
+import { useProducts } from "../hooks/useProducts";
 
 const HomePage: NextPage = () => {
   const { products, isLoading } = useProducts("/products");

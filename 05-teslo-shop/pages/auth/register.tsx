@@ -16,16 +16,13 @@ import {
 import { ErrorOutline } from "@mui/icons-material";
 
 //* layout *//
-import { AuthLayout } from "../../components/layouts";
+import { AuthLayout } from "../../components/layouts/AuthLayout";
 
 //* utils *//
-import { validations } from "../../utils";
-
-//* api *//
-import { tesloApi } from "../../api";
+import { isEmail } from "../../utils/validations";
 
 //* context *//
-import { AuthContext } from "../../context";
+import { AuthContext } from "../../context/auth/AuthContext";
 
 type FormData = {
   name: string;
@@ -99,7 +96,7 @@ const RegisterPage = () => {
                 fullWidth
                 {...register("email", {
                   required: "Este campo es requerido",
-                  validate: validations.isEmail,
+                  validate: isEmail,
                 })}
                 error={!!errors.email}
                 helperText={errors.email?.message}

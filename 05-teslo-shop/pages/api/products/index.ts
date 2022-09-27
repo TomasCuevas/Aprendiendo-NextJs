@@ -1,11 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 //* database *//
-import { db, SHOP_CONTANTS } from "../../../database";
-import { ProductModel } from "../../../database/models";
+import { connect } from "../../../database/config";
+import { SHOP_CONTANTS } from "../../../database/constants";
+import ProductModel from "../../../database/models/Product";
 
 //* interfaces *//
-import { IProduct } from "../../../interfaces";
+import { IProduct } from "../../../interfaces/products";
 
 type Data = { message: string } | IProduct[];
 
@@ -23,7 +24,7 @@ export default function handler(
 }
 
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  await db.connect();
+  await connect();
 
   const { gender = "all" } = req.query;
 

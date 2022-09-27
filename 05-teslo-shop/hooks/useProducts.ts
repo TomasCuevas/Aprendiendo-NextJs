@@ -1,7 +1,7 @@
 import useSWR, { SWRConfiguration } from "swr";
 
 //* interfaces *//
-import { IProduct } from "../interfaces";
+import { IProduct } from "../interfaces/products";
 
 interface Returns {
   products: [] | IProduct[];

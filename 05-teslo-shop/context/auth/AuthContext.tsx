@@ -2,9 +2,9 @@ import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import tesloApi from "../../api/tesloApi";
-import { IUser } from "../../interfaces";
+import { IUser } from "../../interfaces/user";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -36,7 +36,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     if (status === "authenticated") {
-      console.log(data);
+      setUser(data?.user as IUser);
+      setIsLoggedIn(true);
     }
   }, [data, status]);
 
@@ -106,7 +107,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const onLogout = () => {
-    Cookies.remove("token");
     Cookies.remove("cart");
     Cookies.remove("address");
     Cookies.remove("address2");
@@ -118,7 +118,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     Cookies.remove("zip");
     setIsLoggedIn(false);
     setUser(undefined);
-    router.reload();
+
+    signOut();
   };
 
   return (

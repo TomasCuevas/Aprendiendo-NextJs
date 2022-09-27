@@ -1,14 +1,14 @@
 //* database *//
-import { db } from "./";
-import { ProductModel } from "./models";
+import { connect } from "./config";
+import ProductModel from "./models/Product";
 
 //* interface *//
-import { IProduct } from "../interfaces";
+import { IProduct } from "../interfaces/products";
 
 export const getProductBySlug = async (
   slug: string
 ): Promise<IProduct | null> => {
-  await db.connect();
+  await connect();
   const product = await ProductModel.findOne({ slug }).lean();
 
   if (!product) return null;
@@ -21,7 +21,7 @@ interface Returns {
 }
 
 export const getAllProductSlugs = async (): Promise<Returns[]> => {
-  await db.connect();
+  await connect();
 
   const slugs = await ProductModel.find().select("slug -_id").lean();
 
@@ -31,7 +31,7 @@ export const getAllProductSlugs = async (): Promise<Returns[]> => {
 export const getProductsByTerm = async (term: string): Promise<IProduct[]> => {
   term = term.toString().toLowerCase();
 
-  await db.connect();
+  await connect();
   const products = await ProductModel.find({
     $text: { $search: term },
   })
@@ -42,7 +42,7 @@ export const getProductsByTerm = async (term: string): Promise<IProduct[]> => {
 };
 
 export const getAllProducts = async (): Promise<IProduct[]> => {
-  await db.connect();
+  await connect();
 
   const products = await ProductModel.find().lean();
 

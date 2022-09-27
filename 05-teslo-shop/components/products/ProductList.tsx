@@ -1,10 +1,10 @@
 import { Grid } from "@mui/material";
 
 //* components *//
-import { ProductCard } from "./";
+import { ProductCard } from "./ProductCard";
 
 //* interfaces *//
-import { IProduct } from "../../interfaces";
+import { IProduct } from "../../interfaces/products";
 
 interface ProductListProps {
   products: IProduct[];

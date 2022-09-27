@@ -4,10 +4,12 @@ import { SWRConfig } from "swr";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 
 //* providers *//
-import { AuthProvider, CartProvider, UiProvider } from "../context";
+import { AuthProvider } from "../context/auth/AuthContext";
+import { CartProvider } from "../context/cart/CartContext";
+import { UiProvider } from "../context/ui/UiContext";
 
 //* theme and styles *//
-import { lightTheme } from "../themes";
+import { lightTheme } from "../themes/light-theme";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {

@@ -21,8 +21,9 @@ import {
   ShoppingCartOutlined,
 } from "@mui/icons-material";
 
-//* context *//
-import { CartContext, UiContext } from "../../context";
+//* contexts *//
+import { CartContext } from "../../context/cart/CartContext";
+import { UiContext } from "../../context/ui/UiContext";
 
 export const Navbar = () => {
   const { onToggleMenu } = useContext(UiContext);

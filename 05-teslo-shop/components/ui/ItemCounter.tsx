@@ -4,7 +4,7 @@ import { Typography, Box, IconButton } from "@mui/material";
 import { RemoveCircleOutline, AddCircleOutline } from "@mui/icons-material";
 
 //* interfaces *//
-import { ICartProduct } from "../../interfaces";
+import { ICartProduct } from "../../interfaces/cart";
 
 interface ItemCounterProps {
   count: number;

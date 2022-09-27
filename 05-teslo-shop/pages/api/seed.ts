@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 //* database *//
-import { db } from "../../database";
-import { ProductModel, UserModel } from "../../database/models";
+import { connect } from "../../database/config";
+import ProductModel from "../../database/models/Product";
+import UserModel from "../../database/models/User";
 
 //* seed data *//
 import { initialData } from "../../database/seed-data";
@@ -23,7 +24,7 @@ export default async function handler(
       .json({ message: "No tiene acceso a este servicio," });
   }
 
-  await db.connect();
+  await connect();
 
   await UserModel.deleteMany();
   await UserModel.insertMany(initialData.users);

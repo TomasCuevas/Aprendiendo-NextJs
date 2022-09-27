@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 
 //* database *//
-import { db } from "../../../database";
-import { UserModel } from "../../../database/models";
+import { connect } from "../../../database/config";
+import UserModel from "../../../database/models/User";
 
 //* utils *//
-import { jwt } from "../../../utils";
+import { signToken } from "../../../utils/jwt";
 
 type Data =
   | {
@@ -37,7 +37,7 @@ export default function handler(
 const loginUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { email = "", password = "" } = req.body;
 
-  await db.connect();
+  await connect();
 
   const user = await UserModel.findOne({ email });
   if (!user) {
@@ -54,7 +54,7 @@ const loginUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   const { role, name, _id } = user;
 
-  const token = jwt.signToken(_id, email);
+  const token = signToken(_id, email);
 
   return res.status(200).json({
     token,
