@@ -1,5 +1,7 @@
 import { useContext, useState } from "react";
+import { GetServerSideProps } from "next";
 import NextLink from "next/link";
+import { getSession, signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import {
@@ -42,15 +44,7 @@ const LoginPage = () => {
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
 
-    const isLogin = await onLogin(email, password);
-    if (!isLogin) {
-      setShowError(true);
-      setTimeout(() => setShowError(false), 4000);
-      return;
-    }
-
-    const destination = router.query.p?.toString() || "/";
-    router.replace(destination);
+    await signIn("credentials", { email, password });
   };
 
   return (
@@ -102,7 +96,7 @@ const LoginPage = () => {
 
             <Grid item xs={12}>
               <Button
-                color="primary"
+                color="secondary"
                 className="circular-btn"
                 size="large"
                 type="submit"
@@ -121,7 +115,7 @@ const LoginPage = () => {
                 }
                 passHref
               >
-                <Link>No tienes cuenta?</Link>
+                <Link underline="always">¿No tienes cuenta?</Link>
               </NextLink>
             </Grid>
           </Grid>
@@ -129,6 +123,27 @@ const LoginPage = () => {
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  const session = await getSession({ req });
+  const { p = "/" } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: p.toString(),
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default LoginPage;

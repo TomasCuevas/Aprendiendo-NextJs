@@ -139,7 +139,7 @@ const RegisterPage = () => {
                 }
                 passHref
               >
-                <Link>Ya tienes una cuenta?</Link>
+                <Link>¿Ya tienes una cuenta?</Link>
               </NextLink>
             </Grid>
           </Grid>
