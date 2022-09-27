@@ -1,6 +1,7 @@
 import { useContext } from "react";
-import { useRouter } from "next/router";
 import { GetServerSideProps, NextPage } from "next";
+import { useRouter } from "next/router";
+import { getToken } from "next-auth/jwt";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import {
@@ -196,20 +197,14 @@ const AddressPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { token = "" } = req.cookies;
-  let verifyToken = false;
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  try {
-    await isValidToken(token);
-    verifyToken = true;
-  } catch (error) {
-    verifyToken = false;
-  }
+  if (!session) {
+    const requestedPage = req.url;
 
-  if (!verifyToken) {
     return {
       redirect: {
-        destination: "/auth/login?p=/checkout/address",
+        destination: `/auth/login?p=${requestedPage}`,
         permanent: false,
       },
     };
