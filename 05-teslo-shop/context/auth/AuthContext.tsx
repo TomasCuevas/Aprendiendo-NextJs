@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import tesloApi from "../../api/tesloApi";
 import { IUser } from "../../interfaces";
 
@@ -29,12 +30,15 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
+  const { data, status } = useSession();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
-    validateToken();
-  }, []);
+    if (status === "authenticated") {
+      console.log(data);
+    }
+  }, [data, status]);
 
   const validateToken = async () => {
     if (!Cookies.get("token")) return;
