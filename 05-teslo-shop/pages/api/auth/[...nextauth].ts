@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     Credentials({
@@ -20,9 +20,7 @@ export const authOptions = {
         },
       },
       async authorize(credentials) {
-        console.log(credentials);
-
-        return null;
+        return { name: "Tomas", email: "tomas@google.com", role: "admin" };
       },
     }),
     GithubProvider({
@@ -30,6 +28,30 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET!,
     }),
   ],
+  callbacks: {
+    async jwt({ token, account, user }) {
+      if (account) {
+        token.accessToken = account.access_token;
+
+        switch (account.type) {
+          case "oauth":
+            break;
+          case "credentials":
+            token.user = user;
+            break;
+        }
+      }
+
+      return token;
+    },
+
+    async session({ session, token, user }) {
+      session.accessToken = token.accessToken;
+      session.user = token.user as any;
+
+      return session;
+    },
+  },
 };
 
 export default NextAuth(authOptions);
