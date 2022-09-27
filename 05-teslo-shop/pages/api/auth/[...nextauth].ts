@@ -3,7 +3,10 @@ import GithubProvider from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 
 //* database *//
-import { checkUserEmailPassword } from "../../../database/dbUsers";
+import {
+  checkUserEmailPassword,
+  oAuthToDbUser,
+} from "../../../database/dbUsers";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -41,6 +44,10 @@ export const authOptions: NextAuthOptions = {
 
         switch (account.type) {
           case "oauth":
+            token.user = await oAuthToDbUser(
+              user?.email || "",
+              user?.name || ""
+            );
             break;
           case "credentials":
             token.user = user;

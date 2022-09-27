@@ -1,5 +1,10 @@
 import { useContext, useState } from "react";
-import { NextPage, GetStaticProps, GetStaticPaths } from "next";
+import {
+  NextPage,
+  // GetStaticProps,
+  // GetStaticPaths,
+  GetServerSideProps,
+} from "next";
 import { Grid, Box, Typography, Button, Chip } from "@mui/material";
 
 //* database *//
@@ -120,18 +125,41 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
 
 //* static side generation *//
 //* static side generation *//
-export const getStaticPaths: GetStaticPaths = async () => {
-  const slugs = await getAllProductSlugs();
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const slugs = await getAllProductSlugs();
 
-  return {
-    paths: slugs.map(({ slug }) => ({
-      params: { slug },
-    })),
-    fallback: "blocking",
-  };
-};
+//   return {
+//     paths: slugs.map(({ slug }) => ({
+//       params: { slug },
+//     })),
+//     fallback: "blocking",
+//   };
+// };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   const { slug = "" } = params as { slug: string };
+//   const product = await getProductBySlug(slug);
+
+//   if (!product) {
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return {
+//     props: {
+//       product,
+//     },
+//     revalidate: 60 * 60 * 24,
+//   };
+// };
+
+//* server side render *//
+//* server side render *//
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { slug = "" } = params as { slug: string };
   const product = await getProductBySlug(slug);
 
@@ -148,30 +176,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       product,
     },
-    revalidate: 60 * 60 * 24,
   };
 };
-
-//* server side render *//
-//* server side render *//
-// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-//   const { slug = "" } = params as { slug: string };
-//   const product = await dbProducts.getProductBySlug(slug);
-
-//   if (!product) {
-//     return {
-//       redirect: {
-//         destination: "/",
-//         permanent: false,
-//       },
-//     };
-//   }
-
-//   return {
-//     props: {
-//       product,
-//     },
-//   };
-// };
 
 export default ProductPage;
