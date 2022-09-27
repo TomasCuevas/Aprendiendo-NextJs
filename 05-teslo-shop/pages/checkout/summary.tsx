@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import NextLink from "next/link";
+import { getToken } from "next-auth/jwt";
 import {
   Box,
   Button,
@@ -19,9 +20,6 @@ import { ShopLayout } from "../../components/layouts/ShopLayout";
 import { CardList } from "../../components/cart/CardList";
 import { OrderSummary } from "../../components/cart/OrderSummary";
 
-//* utils *//
-import { isValidToken } from "../../utils/jwt";
-
 //* context *//
 import { CartContext } from "../../context/cart/CartContext";
 
@@ -32,7 +30,6 @@ const SummaryPage: NextPage = () => {
   } = useContext(CartContext);
 
   if (!shippingAddress) return <></>;
-
   const { firstName, lastName, address, zip, city, country, phone } =
     shippingAddress;
 
@@ -97,20 +94,32 @@ const SummaryPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { token = "" } = req.cookies;
-  let verifyToken = false;
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  try {
-    await isValidToken(token);
-    verifyToken = true;
-  } catch (error) {
-    verifyToken = false;
-  }
-
-  if (!verifyToken) {
+  if (!session) {
     return {
       redirect: {
-        destination: "/auth/login?p=/checkout/summary",
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  const { firstName, lastName, address, zip, city, country, phone } =
+    req.cookies;
+
+  if (
+    !firstName ||
+    !lastName ||
+    !address ||
+    !zip ||
+    !city ||
+    !country ||
+    !phone
+  ) {
+    return {
+      redirect: {
+        destination: "/checkout/address",
         permanent: false,
       },
     };

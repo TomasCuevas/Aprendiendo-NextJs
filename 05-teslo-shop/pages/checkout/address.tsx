@@ -20,7 +20,6 @@ import {
 import { ShopLayout } from "../../components/layouts/ShopLayout";
 
 //* utils *//
-import { isValidToken } from "../../utils/jwt";
 import { countries } from "../../utils/countries";
 
 //* context *//
@@ -57,6 +56,7 @@ const AddressPage: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     defaultValues: getAddressFromCookies(),
   });
