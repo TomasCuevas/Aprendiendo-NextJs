@@ -11,7 +11,6 @@ import { IUser } from "../../interfaces/user";
 interface AuthContextProps {
   isLoggedIn: boolean;
   user?: IUser;
-  onLogin: (email: string, password: string) => Promise<boolean>;
   onLogout: () => void;
   onRegister: (
     name: string,
@@ -57,22 +56,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const onLogin = async (email: string, password: string): Promise<boolean> => {
-    try {
-      const { data } = await tesloApi.post("/user/login", { email, password });
-      const { token, user } = data;
-
-      Cookies.set("token", token);
-
-      setIsLoggedIn(true);
-      setUser(user);
-
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   const onRegister = async (
     name: string,
     email: string,
@@ -107,7 +90,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const onLogout = () => {
+  const onLogout = async () => {
     Cookies.remove("cart");
     Cookies.remove("address");
     Cookies.remove("address2");
@@ -118,7 +101,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     Cookies.remove("phone");
     Cookies.remove("zip");
 
-    signOut();
+    await signOut();
 
     setIsLoggedIn(false);
     setUser(undefined);
@@ -132,7 +115,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         user,
 
         // methods
-        onLogin,
         onLogout,
         onRegister,
       }}

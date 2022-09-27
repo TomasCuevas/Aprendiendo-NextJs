@@ -1,13 +1,14 @@
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import NextLink from "next/link";
-import { getSession, signIn } from "next-auth/react";
+import { getSession, signIn, getProviders } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import {
   Box,
   Button,
   Chip,
+  Divider,
   Grid,
   Link,
   TextField,
@@ -23,9 +24,6 @@ import { AuthLayout } from "../../components/layouts/AuthLayout";
 //* utils *//
 import { isEmail } from "../../utils/validations";
 
-//* context *//
-import { AuthContext } from "../../context/auth/AuthContext";
-
 type FormData = {
   email: string;
   password: string;
@@ -33,13 +31,19 @@ type FormData = {
 
 const LoginPage = () => {
   const router = useRouter();
-  const { onLogin } = useContext(AuthContext);
   const [showError, setShowError] = useState(false);
+  const [providers, setProviders] = useState<any>({});
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+
+  useEffect(() => {
+    getProviders().then((prov) => {
+      setProviders(prov);
+    });
+  }, []);
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
@@ -118,6 +122,31 @@ const LoginPage = () => {
                 <Link underline="always">¿No tienes cuenta?</Link>
               </NextLink>
             </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            display="flex"
+            flexDirection="column"
+            alignItems="end"
+          >
+            <Divider sx={{ width: "100%", mt: 3 }} />
+            {Object.values(providers).map((provider: any) => {
+              if (provider.id! === "credentials") return <></>;
+
+              return (
+                <Button
+                  key={provider.id}
+                  variant="outlined"
+                  fullWidth
+                  color="primary"
+                  sx={{ mb: 1 }}
+                  onClick={() => signIn(provider.id)}
+                >
+                  {provider.name}
+                </Button>
+              );
+            })}
           </Grid>
         </Box>
       </form>
