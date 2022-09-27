@@ -69,6 +69,11 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/login",
     newUser: "/auth/register",
   },
+  session: {
+    maxAge: 2592000,
+    strategy: "jwt",
+    updateAge: 86400,
+  },
 };
 
 export default NextAuth(authOptions);

@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, signIn } from "next-auth/react";
 import tesloApi from "../../api/tesloApi";
 import { IUser } from "../../interfaces/user";
 
@@ -91,12 +91,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsLoggedIn(true);
       setUser(user);
 
+      await signIn("credentials", { email, password });
       return {
         hasError: false,
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return { hasError: true, message: error.response?.data.message };
+        return { hasError: true, message: error.response!.data!.message || "" };
       }
 
       return {
@@ -116,10 +117,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     Cookies.remove("lastName");
     Cookies.remove("phone");
     Cookies.remove("zip");
-    setIsLoggedIn(false);
-    setUser(undefined);
 
     signOut();
+
+    setIsLoggedIn(false);
+    setUser(undefined);
   };
 
   return (

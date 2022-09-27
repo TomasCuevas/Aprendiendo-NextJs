@@ -1,6 +1,8 @@
 import { useContext, useState } from "react";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
+import { getSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import {
   Box,
@@ -147,6 +149,27 @@ const RegisterPage = () => {
       </form>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  const session = await getSession({ req });
+  const { p = "/" } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: p.toString(),
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default RegisterPage;
