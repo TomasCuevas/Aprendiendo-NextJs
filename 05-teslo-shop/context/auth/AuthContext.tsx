@@ -104,6 +104,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const onLogout = () => {
     Cookies.remove("token");
     Cookies.remove("cart");
+    Cookies.remove("address");
+    Cookies.remove("address2");
+    Cookies.remove("city");
+    Cookies.remove("country");
+    Cookies.remove("firstName");
+    Cookies.remove("lastName");
+    Cookies.remove("phone");
+    Cookies.remove("zip");
     setIsLoggedIn(false);
     setUser(undefined);
     router.reload();
