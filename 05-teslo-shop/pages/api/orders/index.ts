@@ -17,5 +17,7 @@ export default function handler(
   }
 }
 const createOrder = (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  return res.status(200).json({ message: "Hello World!" });
+  const body = req.body;
+
+  return res.status(200).json(body);
 };

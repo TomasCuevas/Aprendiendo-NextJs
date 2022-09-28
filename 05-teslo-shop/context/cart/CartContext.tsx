@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import tesloApi from "../../api/tesloApi";
 
 import { ICartProduct } from "../../interfaces/cart";
-import { ShippingAddress } from "../../interfaces/order";
+import { IOrder, ShippingAddress } from "../../interfaces/order";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -154,8 +154,24 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   };
 
   const createOrder = async () => {
+    if (!shippingAddress) throw new Error("No hay direccion de entrega");
+
+    const body: IOrder = {
+      orderItems: cart.cartItems.map((product) => ({
+        ...product,
+        size: product.sizes!,
+        image: product.images[0],
+      })),
+      shippingAddress,
+      numberOfItems: cart.numberOfItems,
+      subtotal: cart.subtotal,
+      tax: cart.taxes,
+      total: cart.total,
+      isPaid: false,
+    };
+
     try {
-      const { data } = await tesloApi.post("/orders");
+      const { data } = await tesloApi.post("/orders", { body });
       console.log(data);
     } catch (error) {}
   };

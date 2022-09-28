@@ -1,27 +1,29 @@
+import { IValidSizes } from "./products";
 import { IUser } from "./user";
 
 export interface IOrder {
   _id?: string;
-  user?: IUser | string;
-  orderItems: IOrderItem[];
-  shippingAddress: ShippingAddress;
-  paymentResult?: string;
+  isPaid: boolean;
   numberOfItems: number;
+  orderItems: IOrderItem[];
+  paidAt?: string;
+  paymentResult?: string;
+  shippingAddress: ShippingAddress;
   subtotal: number;
   tax: number;
   total: number;
-  isPaid: boolean;
-  paidAt?: string;
+  user?: IUser | string;
 }
 
 export interface IOrderItem {
   _id: string;
-  title: string;
-  size: string;
-  quantity: number;
-  slug: string;
+  gender: "men" | "women" | "kid" | "unisex";
   image: string;
   price: number;
+  quantity: number;
+  size: IValidSizes;
+  slug: string;
+  title: string;
 }
 
 export interface ShippingAddress {
