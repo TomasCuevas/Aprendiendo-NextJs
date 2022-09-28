@@ -1,13 +1,23 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useContext } from "react";
 import { Grid, Typography } from "@mui/material";
 
 //* context *//
 import { CartContext } from "../../context/cart/CartContext";
 
-export const OrderSummary = () => {
-  const {
-    cart: { numberOfItems, subtotal, taxes, total },
-  } = useContext(CartContext);
+interface OrderSummaryProps {
+  summary?: {
+    numberOfItems: number;
+    subtotal: number;
+    taxes: number;
+    total: number;
+  };
+}
+
+export const OrderSummary = ({ summary }: OrderSummaryProps) => {
+  const { numberOfItems, subtotal, taxes, total } = summary
+    ? summary
+    : useContext(CartContext);
 
   return (
     <Grid container>

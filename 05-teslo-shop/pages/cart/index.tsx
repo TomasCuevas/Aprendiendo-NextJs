@@ -23,9 +23,7 @@ import { CartContext } from "../../context/cart/CartContext";
 
 const CartPage: NextPage = () => {
   const router = useRouter();
-  const {
-    cart: { numberOfItems, isLoaded },
-  } = useContext(CartContext);
+  const { numberOfItems, isLoaded } = useContext(CartContext);
 
   useEffect(() => {
     if (isLoaded && numberOfItems === 0) {
@@ -55,7 +53,7 @@ const CartPage: NextPage = () => {
               <OrderSummary />
               <Box sx={{ mt: 3 }}>
                 <Button
-                  href="/checkout/address"
+                  onClick={() => router.push("/checkout/address")}
                   color="secondary"
                   className="circular-btn"
                   fullWidth

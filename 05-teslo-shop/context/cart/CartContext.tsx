@@ -9,7 +9,7 @@ import { IOrder, ShippingAddress } from "../../interfaces/order";
 
 //* CONTEXT *//
 //* CONTEXT *//
-interface CartContextProps {
+interface CartContextProps extends Cart {
   cart: Cart;
   shippingAddress: ShippingAddress;
   addProductToCart: (newProduct: ICartProduct) => void;
@@ -90,7 +90,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     let newCart = [...cart.cartItems];
 
     const productIndex = newCart.findIndex(
-      ({ _id, sizes }) => _id === newProduct._id && sizes === newProduct.sizes
+      ({ _id, size }) => _id === newProduct._id && size === newProduct.size
     );
     const isThereProduct = productIndex >= 0;
 
@@ -114,7 +114,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     let newCart = [...cart.cartItems];
 
     const productIndex = newCart.findIndex(
-      ({ _id, sizes }) => _id === product._id && sizes === product.sizes
+      ({ _id, size }) => _id === product._id && size === product.size
     );
 
     const isThereProduct = productIndex >= 0;
@@ -166,8 +166,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     const body: IOrder = {
       orderItems: cart.cartItems.map((product) => ({
         ...product,
-        size: product.sizes!,
-        image: product.images[0],
+        size: product.size!,
+        image: product.image,
       })),
       shippingAddress,
       numberOfItems: cart.numberOfItems,
@@ -210,6 +210,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     <CartContext.Provider
       value={{
         // properties
+        ...cart,
         cart,
         shippingAddress,
 

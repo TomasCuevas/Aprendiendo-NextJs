@@ -39,6 +39,12 @@ interface OrderPageProps {
 
 const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
   const { shippingAddress } = order;
+  const summary = {
+    numberOfItems: order.numberOfItems,
+    subtotal: order.subtotal,
+    taxes: order.tax,
+    total: order.total,
+  };
 
   return (
     <ShopLayout
@@ -103,16 +109,28 @@ const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
               <Typography>{shippingAddress.phone}</Typography>
 
               <Divider sx={{ my: 1 }} />
-              <OrderSummary />
-              <Box sx={{ mt: 3 }}>
-                <h1>Pagar</h1>
-                <Chip
-                  sx={{ my: 2 }}
-                  label="Orden ya fue pagada"
-                  variant="outlined"
-                  color="success"
-                  icon={<CreditScoreOutlined />}
-                />
+              <OrderSummary summary={summary} />
+              <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
+                {order.isPaid ? (
+                  <Chip
+                    sx={{ my: 2 }}
+                    label="Pagada"
+                    variant="outlined"
+                    color="success"
+                    icon={<CreditScoreOutlined />}
+                  />
+                ) : (
+                  <>
+                    <h1>Pagar</h1>
+                    <Chip
+                      sx={{ my: 2 }}
+                      label="Pendiente de pago"
+                      variant="outlined"
+                      color="error"
+                      icon={<CreditCardOffOutlined />}
+                    />
+                  </>
+                )}
               </Box>
             </CardContent>
           </Card>

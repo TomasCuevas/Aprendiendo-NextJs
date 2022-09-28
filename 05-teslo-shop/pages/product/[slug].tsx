@@ -38,17 +38,17 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,
     gender: product.gender,
-    images: product.images,
+    image: product.images[0],
     inStock: product.inStock,
     price: product.price,
     quantity: 1,
     slug: product.slug,
     title: product.title,
-    sizes: undefined,
+    size: undefined,
   });
 
   const onSelectedSize = (size: IValidSizes) => {
-    setTempCartProduct({ ...tempCartProduct, sizes: size });
+    setTempCartProduct({ ...tempCartProduct, size: size });
   };
 
   const onSelectedQuantity = (add: boolean) => {
@@ -63,7 +63,7 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
   };
 
   const onAddProduct = () => {
-    if (!tempCartProduct.sizes) return;
+    if (!tempCartProduct.size) return;
 
     addProductToCart(tempCartProduct);
   };
@@ -89,7 +89,7 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
               />
               <SizeSelector
                 sizes={product.sizes}
-                selectedSize={tempCartProduct.sizes}
+                selectedSize={tempCartProduct.size}
                 changeSize={onSelectedSize}
               />
             </Box>
@@ -99,7 +99,7 @@ const ProductPage: NextPage<SlugPageProps> = ({ product }) => {
                 color="secondary"
                 className="circular-btn"
               >
-                {tempCartProduct.sizes
+                {tempCartProduct.size
                   ? "Agregar al Carrito"
                   : "Seleccione una talla"}
               </Button>
