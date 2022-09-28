@@ -15,6 +15,7 @@ const EmptyPage: NextPage = () => {
       pageDescription="No hay articulos en el carrito de compras"
     >
       <Box
+        className="fadeIn"
         display="flex"
         justifyContent="center"
         alignItems="center"

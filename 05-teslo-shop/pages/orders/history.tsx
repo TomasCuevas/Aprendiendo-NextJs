@@ -1,9 +1,16 @@
+import { GetServerSideProps } from "next";
+import NextLink from "next/link";
+import type { NextPage } from "next";
+import { getSession } from "next-auth/react";
 import { Chip, Grid, Link, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import NextLink from "next/link";
 
 //* layouts *//
 import { ShopLayout } from "../../components/layouts/ShopLayout";
+
+//* database *//
+import { getOrdersByUser } from "../../database/dbOrders";
+import { IOrder } from "../../interfaces/order";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 100 },
@@ -16,7 +23,7 @@ const columns: GridColDef[] = [
       return params.row.paid ? (
         <Chip color="success" label="Pagada" variant="outlined" />
       ) : (
-        <Chip color="error" label="Pendiente" variant="outlined" />
+        <Chip color="error" label="No pagada" variant="outlined" />
       );
     },
   },
@@ -29,7 +36,9 @@ const columns: GridColDef[] = [
       return (
         params.row.order && (
           <NextLink href={`/orders/${params.row.order}`}>
-            <Link underline="always">Orden: {`${params.row.order}`}</Link>
+            <Link style={{ cursor: "pointer" }} underline="always">
+              Orden: {`${params.row.order}`}
+            </Link>
           </NextLink>
         )
       );
@@ -37,15 +46,20 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  { id: 1, paid: true, fullname: "Tomas Cuevas", order: "1" },
-  { id: 2, paid: false, fullname: "Melissa Flores" },
-  { id: 3, paid: true, fullname: "Fernando Herrera" },
-  { id: 4, paid: false, fullname: "Emin Reyes" },
-  { id: 5, paid: false, fullname: "Eduardo Rios" },
-];
+//* interfaces *//
 
-const HistoryPage = () => {
+interface HistoryPageProps {
+  orders: IOrder[];
+}
+
+const HistoryPage: NextPage<HistoryPageProps> = ({ orders }) => {
+  const rows = orders.map((order, index) => ({
+    id: index,
+    paid: order.isPaid,
+    fullname: `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`,
+    order: order._id,
+  }));
+
   return (
     <ShopLayout
       title="Historial de ordenes"
@@ -54,7 +68,7 @@ const HistoryPage = () => {
       <Typography variant="h1" component="h1">
         Historial de ordenes
       </Typography>
-      <Grid container>
+      <Grid className="fadeIn" sx={{ mt: 2 }} container>
         <Grid item xs={12} sx={{ height: 650, width: "100%" }}>
           <DataGrid
             rows={rows}
@@ -66,6 +80,27 @@ const HistoryPage = () => {
       </Grid>
     </ShopLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const session = await getSession({ req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth/login?p=/orders/history",
+        permanent: false,
+      },
+    };
+  }
+
+  const { _id } = (await session.user) as { _id: string };
+  const orders = await getOrdersByUser(_id);
+
+  return {
+    props: {
+      orders,
+    },
+  };
 };
 
 export default HistoryPage;

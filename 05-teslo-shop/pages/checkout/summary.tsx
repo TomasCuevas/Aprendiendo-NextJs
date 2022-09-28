@@ -58,7 +58,7 @@ const SummaryPage: NextPage = () => {
       <Typography variant="h1" component="h1">
         Resumen de la orden
       </Typography>
-      <Grid container>
+      <Grid className="fadeIn" container>
         <Grid item xs={12} sm={7}>
           <CardList />
         </Grid>
