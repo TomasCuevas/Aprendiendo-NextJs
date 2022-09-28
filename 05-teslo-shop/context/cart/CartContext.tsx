@@ -171,7 +171,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     };
 
     try {
-      const { data } = await tesloApi.post("/orders", { body });
+      const { data } = await tesloApi.post("/orders", body);
       console.log(data);
     } catch (error) {}
   };

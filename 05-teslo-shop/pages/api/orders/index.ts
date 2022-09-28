@@ -6,10 +6,13 @@ import { IOrder } from "../../../interfaces/order";
 //* database *//
 import { connect } from "../../../database/config";
 import Product from "../../../database/models/Product";
+import Order from "../../../database/models/Order";
 
-type Data = {
-  message: string;
-};
+type Data =
+  | {
+      message: string;
+    }
+  | IOrder;
 
 export default function handler(
   req: NextApiRequest,
@@ -26,6 +29,8 @@ export default function handler(
 const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { orderItems, total } = req.body as IOrder;
 
+  console.log(req.body);
+
   const session = await getSession({ req });
   if (!session) {
     return res.status(400).json({
@@ -41,7 +46,7 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   try {
     const subtotal = orderItems.reduce((prevState, current) => {
       const currentPrice = dbProducts.find(
-        (product) => product._id === current._id
+        (product) => product.id.toString() === current._id
       )?.price;
       if (!currentPrice) {
         throw new Error("Verifique el carrito. Producto no existe.");
@@ -49,7 +54,23 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
       return currentPrice * current.quantity + prevState;
     }, 0);
-  } catch (error) {}
 
-  return res.status(200).json({ message: "example" });
+    const taxes = Number(((subtotal * 15) / 100).toFixed(2));
+    const backendTotal = Number((subtotal + taxes).toFixed(2));
+
+    if (total !== backendTotal) {
+      throw new Error("El total no cuadra con el monto.");
+    }
+
+    const userId = session.user._id;
+    const newOrder = new Order({ ...req.body, isPaid: false, user: userId });
+    await newOrder.save();
+
+    return res.status(200).json(newOrder);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: "Revise logs del servidor.",
+    });
+  }
 };

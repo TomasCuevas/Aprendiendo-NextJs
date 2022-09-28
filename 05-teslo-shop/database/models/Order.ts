@@ -17,7 +17,7 @@ const OrderSchema = new Schema(
         price: { type: Number, required: true },
       },
     ],
-    ShippingAddress: {
+    shippingAddress: {
       address: { type: String, required: true },
       address2: { type: String },
       city: { type: String, required: true },
@@ -27,7 +27,6 @@ const OrderSchema = new Schema(
       phone: { type: String, required: true },
       zip: { type: String, required: true },
     },
-    paymentResult: { type: Number, required: true },
     numberOfItems: { type: Number, required: true },
     subtotal: { type: Number, required: true },
     tax: { type: Number, required: true },
