@@ -26,7 +26,7 @@ import { CartContext } from "../../context/cart/CartContext";
 const SummaryPage: NextPage = () => {
   const {
     shippingAddress,
-    cart: { cartCount },
+    cart: { numberOfItems },
   } = useContext(CartContext);
 
   if (!shippingAddress) return <></>;
@@ -46,7 +46,7 @@ const SummaryPage: NextPage = () => {
           <Card className="sumary-card">
             <CardContent>
               <Typography variant="h2">
-                Resumen ({cartCount} productos)
+                Resumen ({numberOfItems} productos)
               </Typography>
               <Divider sx={{ my: 1 }} />
 

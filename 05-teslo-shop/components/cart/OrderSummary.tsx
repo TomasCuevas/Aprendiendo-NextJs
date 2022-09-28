@@ -6,7 +6,7 @@ import { CartContext } from "../../context/cart/CartContext";
 
 export const OrderSummary = () => {
   const {
-    cart: { cartCount, subtotal, taxes, total },
+    cart: { numberOfItems, subtotal, taxes, total },
   } = useContext(CartContext);
 
   return (
@@ -15,7 +15,7 @@ export const OrderSummary = () => {
         <Typography>No. Productos</Typography>
       </Grid>
       <Grid item xs={6} display="flex" justifyContent="end">
-        <Typography>{cartCount} productos</Typography>
+        <Typography>{numberOfItems} productos</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography>Subtotal</Typography>

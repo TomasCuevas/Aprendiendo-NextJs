@@ -24,20 +24,20 @@ import { CartContext } from "../../context/cart/CartContext";
 const CartPage: NextPage = () => {
   const router = useRouter();
   const {
-    cart: { cartCount, isLoaded },
+    cart: { numberOfItems, isLoaded },
   } = useContext(CartContext);
 
   useEffect(() => {
-    if (isLoaded && cartCount === 0) {
+    if (isLoaded && numberOfItems === 0) {
       router.replace("/cart/empty");
     }
-  }, [isLoaded, cartCount, router]);
+  }, [isLoaded, numberOfItems, router]);
 
-  if (!isLoaded && cartCount === 0) return <></>;
+  if (!isLoaded && numberOfItems === 0) return <></>;
 
   return (
     <ShopLayout
-      title={`Carrito - ${cartCount} productos`}
+      title={`Carrito - ${numberOfItems} productos`}
       pageDescription="Carrito de compras de la tienda"
     >
       <Typography variant="h1" component="h1">

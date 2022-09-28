@@ -28,7 +28,7 @@ import { UiContext } from "../../context/ui/UiContext";
 export const Navbar = () => {
   const { onToggleMenu } = useContext(UiContext);
   const {
-    cart: { cartCount },
+    cart: { numberOfItems },
   } = useContext(CartContext);
   const { pathname, push } = useRouter();
 
@@ -138,7 +138,7 @@ export const Navbar = () => {
           <Link>
             <IconButton>
               <Badge
-                badgeContent={cartCount > 9 ? "+9" : cartCount}
+                badgeContent={numberOfItems > 9 ? "+9" : numberOfItems}
                 color="secondary"
               >
                 <ShoppingCartOutlined />

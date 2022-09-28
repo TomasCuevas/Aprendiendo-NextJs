@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 import { ICartProduct } from "../../interfaces/cart";
+import { ShippingAddress } from "../../interfaces/order";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -20,7 +21,7 @@ export const CartContext = createContext({} as CartContextProps);
 //* PROVIDER *//
 const CART_INITIAL_STATE: Cart = {
   cartItems: Cookies.get("cart") ? JSON.parse(Cookies.get("cart")!) : [],
-  cartCount: 0,
+  numberOfItems: 0,
   isLoaded: false,
   subtotal: 0,
   taxes: 0,
@@ -42,20 +43,9 @@ interface CartProviderProps {
   children: React.ReactNode;
 }
 
-interface ShippingAddress {
-  address: string;
-  address2?: string;
-  city: string;
-  country: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  zip: string;
-}
-
 interface Cart {
   cartItems: ICartProduct[];
-  cartCount: number;
+  numberOfItems: number;
   isLoaded: boolean;
   subtotal: number;
   taxes: number;
@@ -75,7 +65,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   useEffect(() => {
     setCart((prev) => ({
       ...prev,
-      cartCount: cart.cartItems.reduce(
+      numberOfItems: cart.cartItems.reduce(
         (prevState, current) => current.quantity + prevState,
         0
       ),
