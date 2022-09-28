@@ -5,6 +5,7 @@ import tesloApi from "../../api/tesloApi";
 
 import { ICartProduct } from "../../interfaces/cart";
 import { IOrder, ShippingAddress } from "../../interfaces/order";
+import axios from "axios";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -12,7 +13,10 @@ interface CartContextProps {
   cart: Cart;
   shippingAddress: ShippingAddress;
   addProductToCart: (newProduct: ICartProduct) => void;
-  createOrder: () => void;
+  createOrder: () => Promise<{
+    hasError: boolean;
+    message: string;
+  }>;
   deleteCart: (product: ICartProduct) => void;
   updateAddress: (address: ShippingAddress) => void;
   updateCartQuantity: (add: boolean, product: ICartProduct) => void;
@@ -153,7 +157,10 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     setShippingAddress(address);
   };
 
-  const createOrder = async () => {
+  const createOrder = async (): Promise<{
+    hasError: boolean;
+    message: string;
+  }> => {
     if (!shippingAddress) throw new Error("No hay direccion de entrega");
 
     const body: IOrder = {
@@ -171,9 +178,27 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     };
 
     try {
-      const { data } = await tesloApi.post("/orders", body);
-      console.log(data);
-    } catch (error) {}
+      const { data } = await tesloApi.post<IOrder>("/orders", body);
+
+      return {
+        hasError: false,
+        message: data._id!,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const { message } = error.response?.data as { message: string };
+
+        return {
+          hasError: true,
+          message,
+        };
+      }
+
+      return {
+        hasError: true,
+        message: "Error no controlado, hable con un administrador.",
+      };
+    }
   };
 
   return (

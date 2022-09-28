@@ -80,7 +80,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return { hasError: true, message: error.response!.data!.message || "" };
+        const { message } = error.response?.data as { message: string };
+
+        return {
+          hasError: true,
+          message,
+        };
       }
 
       return {

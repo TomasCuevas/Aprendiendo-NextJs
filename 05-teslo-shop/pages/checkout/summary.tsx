@@ -1,12 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import { getToken } from "next-auth/jwt";
 import {
   Box,
   Button,
   Card,
   CardContent,
+  Chip,
   Divider,
   Grid,
   Link,
@@ -24,14 +26,32 @@ import { OrderSummary } from "../../components/cart/OrderSummary";
 import { CartContext } from "../../context/cart/CartContext";
 
 const SummaryPage: NextPage = () => {
+  const router = useRouter();
   const {
     cart: { numberOfItems },
     createOrder,
     shippingAddress,
   } = useContext(CartContext);
 
+  const [isPosting, setIsPosting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const { firstName, lastName, address, zip, city, country, phone } =
     shippingAddress;
+
+  const onCreateOrder = async () => {
+    setIsPosting(true);
+
+    const { hasError, message } = await createOrder();
+
+    if (hasError) {
+      setIsPosting(false);
+      setErrorMessage(message);
+      return;
+    }
+
+    router.replace(`/orders/${message}`);
+  };
 
   return (
     <ShopLayout title="Resumen de orden" pageDescription="Resumen de la orden">
@@ -80,15 +100,22 @@ const SummaryPage: NextPage = () => {
                 </NextLink>
               </Box>
               <OrderSummary />
-              <Box sx={{ mt: 3 }}>
+              <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
                 <Button
-                  onClick={createOrder}
+                  onClick={onCreateOrder}
                   color="secondary"
                   className="circular-btn"
                   fullWidth
+                  disabled={isPosting}
                 >
                   Confirmar orden
                 </Button>
+
+                <Chip
+                  color="error"
+                  label={errorMessage}
+                  sx={{ display: errorMessage ? "flex" : "none", mt: 2 }}
+                />
               </Box>
             </CardContent>
           </Card>
