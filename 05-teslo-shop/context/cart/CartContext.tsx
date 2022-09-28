@@ -1,11 +1,11 @@
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 import tesloApi from "../../api/tesloApi";
 
 import { ICartProduct } from "../../interfaces/cart";
 import { IOrder, ShippingAddress } from "../../interfaces/order";
-import axios from "axios";
 
 //* CONTEXT *//
 //* CONTEXT *//
@@ -179,6 +179,11 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
     try {
       const { data } = await tesloApi.post<IOrder>("/orders", body);
+
+      setCart((prevCart) => ({
+        ...prevCart,
+        cartItems: [],
+      }));
 
       return {
         hasError: false,
