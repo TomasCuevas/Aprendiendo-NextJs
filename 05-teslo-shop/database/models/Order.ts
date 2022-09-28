@@ -31,7 +31,7 @@ const OrderSchema = new Schema(
     subtotal: { type: Number, required: true },
     tax: { type: Number, required: true },
     total: { type: Number, required: true },
-    isPaid: { type: Number, required: true, default: false },
+    isPaid: { type: Boolean, default: false },
     paidAt: { type: String },
   },
   {
