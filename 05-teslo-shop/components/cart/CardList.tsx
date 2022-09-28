@@ -16,11 +16,16 @@ import { ItemCounter } from "../ui/ItemCounter";
 //* context *//
 import { CartContext } from "../../context/cart/CartContext";
 
+//* interfaces *//
+import { ICartProduct } from "../../interfaces/cart";
+import { IOrderItem } from "../../interfaces/order";
+
 interface CardListProps {
   editable?: boolean;
+  products?: IOrderItem[];
 }
 
-export const CardList = ({ editable = false }: CardListProps) => {
+export const CardList = ({ editable = false, products }: CardListProps) => {
   const {
     cart: { cartItems },
     updateCartQuantity,
@@ -32,22 +37,24 @@ export const CardList = ({ editable = false }: CardListProps) => {
     setHasMounted(true);
   }, []);
 
+  const productsToShow = products ? products : cartItems;
+
   return (
     <>
       {hasMounted &&
-        cartItems.map((product) => (
+        productsToShow.map((product) => (
           <Grid
             container
             spacing={2}
             sx={{ mb: 1 }}
-            key={`${product.slug}${product.sizes}`}
+            key={`${product.slug}${product.size}`}
           >
             <Grid item xs={3}>
               <NextLink href={`/product/${product.slug}`} passHref>
                 <Link>
                   <CardActionArea>
                     <CardMedia
-                      image={`/products/${product.images[0]}`}
+                      image={`/products/${product.image}`}
                       component="img"
                       sx={{ borderRadius: "5px" }}
                     />
@@ -59,13 +66,13 @@ export const CardList = ({ editable = false }: CardListProps) => {
               <Box display="flex" flexDirection="column">
                 <Typography variant="body1">{product.title}</Typography>
                 <Typography variant="body1">
-                  Talla: <strong>{product.sizes}</strong>
+                  Talla: <strong>{product.size}</strong>
                 </Typography>
                 {editable ? (
                   <ItemCounter
                     count={product.quantity}
                     modifyCount={updateCartQuantity}
-                    product={product}
+                    product={product as ICartProduct}
                   />
                 ) : (
                   <Typography variant="subtitle1">
@@ -84,7 +91,7 @@ export const CardList = ({ editable = false }: CardListProps) => {
               <Typography variant="subtitle1">{`$${product.price}`}</Typography>
               {editable && (
                 <Button
-                  onClick={() => deleteCart(product)}
+                  onClick={() => deleteCart(product as ICartProduct)}
                   variant="text"
                   color="secondary"
                 >

@@ -37,41 +37,46 @@ interface OrderPageProps {
   order: IOrder;
 }
 
-const OrderPage: NextPage<OrderPageProps> = (order) => {
-  console.log(order);
+const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
+  const { shippingAddress } = order;
 
   return (
     <ShopLayout
-      title="Resumen de la orden 123ABC"
+      title={`Resumen de la orden ${order._id}`}
       pageDescription="Resumen de la orden"
     >
       <Typography variant="h1" component="h1" sx={{ mb: 2 }}>
-        Orden: 123ABC
+        Orden: {order._id}
       </Typography>
 
-      {/* <Chip
-        sx={{ my: 2 }}
-        label="Pendiente de pago"
-        variant="outlined"
-        color="error"
-        icon={<CreditCardOffOutlined />}
-      /> */}
-      <Chip
-        sx={{ my: 2 }}
-        label="Pagada"
-        variant="outlined"
-        color="success"
-        icon={<CreditScoreOutlined />}
-      />
+      {order.isPaid ? (
+        <Chip
+          sx={{ my: 2 }}
+          label="Pagada"
+          variant="outlined"
+          color="success"
+          icon={<CreditScoreOutlined />}
+        />
+      ) : (
+        <Chip
+          sx={{ my: 2 }}
+          label="Pendiente de pago"
+          variant="outlined"
+          color="error"
+          icon={<CreditCardOffOutlined />}
+        />
+      )}
 
       <Grid container>
         <Grid item xs={12} sm={7}>
-          <CardList />
+          <CardList products={order.orderItems} />
         </Grid>
         <Grid item xs={12} sm={5}>
           <Card className="sumary-card">
             <CardContent>
-              <Typography variant="h2">Resumen (3 productos)</Typography>
+              <Typography variant="h2">
+                Resumen ({order.numberOfItems} productos)
+              </Typography>
               <Divider sx={{ my: 1 }} />
 
               <Box
@@ -87,19 +92,17 @@ const OrderPage: NextPage<OrderPageProps> = (order) => {
                 </NextLink>
               </Box>
 
-              <Typography>Tomas Cuevas</Typography>
-              <Typography>Belgrano 2823</Typography>
-              <Typography>3550</Typography>
-              <Typography>Vera</Typography>
-              <Typography>Argentina</Typography>
-              <Typography>+54 3483522258</Typography>
+              <Typography>
+                {shippingAddress.firstName} {shippingAddress.lastName}
+              </Typography>
+              <Typography>{shippingAddress.address}</Typography>
+              <Typography>
+                {shippingAddress.city} {shippingAddress.zip}
+              </Typography>
+              <Typography>{shippingAddress.country}</Typography>
+              <Typography>{shippingAddress.phone}</Typography>
 
               <Divider sx={{ my: 1 }} />
-              <Box display="flex" justifyContent="end">
-                <NextLink href="/cart" passHref>
-                  <Link underline="always">Editar</Link>
-                </NextLink>
-              </Box>
               <OrderSummary />
               <Box sx={{ mt: 3 }}>
                 <h1>Pagar</h1>
