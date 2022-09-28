@@ -68,8 +68,8 @@ export const CardList = ({ editable = false }: CardListProps) => {
                     product={product}
                   />
                 ) : (
-                  <Typography variant="subtitle2">
-                    {product.quantity}
+                  <Typography variant="subtitle1">
+                    {product.quantity} productos
                   </Typography>
                 )}
               </Box>

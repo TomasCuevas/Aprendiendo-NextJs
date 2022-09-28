@@ -25,11 +25,11 @@ import { CartContext } from "../../context/cart/CartContext";
 
 const SummaryPage: NextPage = () => {
   const {
-    shippingAddress,
     cart: { numberOfItems },
+    createOrder,
+    shippingAddress,
   } = useContext(CartContext);
 
-  if (!shippingAddress) return <></>;
   const { firstName, lastName, address, zip, city, country, phone } =
     shippingAddress;
 
@@ -81,7 +81,12 @@ const SummaryPage: NextPage = () => {
               </Box>
               <OrderSummary />
               <Box sx={{ mt: 3 }}>
-                <Button color="secondary" className="circular-btn" fullWidth>
+                <Button
+                  onClick={createOrder}
+                  color="secondary"
+                  className="circular-btn"
+                  fullWidth
+                >
                   Confirmar orden
                 </Button>
               </Box>

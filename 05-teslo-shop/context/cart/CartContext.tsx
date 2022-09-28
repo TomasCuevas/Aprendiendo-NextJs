@@ -1,6 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
+import tesloApi from "../../api/tesloApi";
+
 import { ICartProduct } from "../../interfaces/cart";
 import { ShippingAddress } from "../../interfaces/order";
 
@@ -8,8 +10,9 @@ import { ShippingAddress } from "../../interfaces/order";
 //* CONTEXT *//
 interface CartContextProps {
   cart: Cart;
-  shippingAddress?: ShippingAddress;
+  shippingAddress: ShippingAddress;
   addProductToCart: (newProduct: ICartProduct) => void;
+  createOrder: () => void;
   deleteCart: (product: ICartProduct) => void;
   updateAddress: (address: ShippingAddress) => void;
   updateCartQuantity: (add: boolean, product: ICartProduct) => void;
@@ -150,6 +153,13 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     setShippingAddress(address);
   };
 
+  const createOrder = async () => {
+    try {
+      const { data } = await tesloApi.post("/orders");
+      console.log(data);
+    } catch (error) {}
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -159,6 +169,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
         // methods
         addProductToCart,
+        createOrder,
         deleteCart,
         updateAddress,
         updateCartQuantity,
