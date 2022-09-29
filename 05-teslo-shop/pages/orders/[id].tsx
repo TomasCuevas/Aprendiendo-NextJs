@@ -2,6 +2,7 @@ import NextLink from "next/link";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import { getSession } from "next-auth/react";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 import {
   Box,
   Button,
@@ -121,7 +122,26 @@ const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
                   />
                 ) : (
                   <>
-                    <h1>Pagar</h1>
+                    <PayPalButtons
+                      createOrder={(data, actions) => {
+                        return actions.order.create({
+                          purchase_units: [
+                            {
+                              amount: {
+                                value: "2000.20",
+                              },
+                            },
+                          ],
+                        });
+                      }}
+                      onApprove={(data, actions) => {
+                        return actions.order!.capture().then((details) => {
+                          console.log({ details });
+                          const name = details.payer.name.given_name;
+                          alert(`Transaction completed by ${name}`);
+                        });
+                      }}
+                    />
                     <Chip
                       sx={{ my: 2 }}
                       label="Pendiente de pago"
