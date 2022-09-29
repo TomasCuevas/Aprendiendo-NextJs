@@ -37,7 +37,7 @@ const columns: GridColDef[] = [
         params.row.order && (
           <NextLink href={`/orders/${params.row.order}`}>
             <Link style={{ cursor: "pointer" }} underline="always">
-              Orden: {`${params.row.order}`}
+              Ver orden
             </Link>
           </NextLink>
         )
@@ -54,7 +54,7 @@ interface HistoryPageProps {
 
 const HistoryPage: NextPage<HistoryPageProps> = ({ orders }) => {
   const rows = orders.map((order, index) => ({
-    id: index,
+    id: index + 1,
     paid: order.isPaid,
     fullname: `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`,
     order: order._id,

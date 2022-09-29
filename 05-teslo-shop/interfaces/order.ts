@@ -12,6 +12,7 @@ export interface IOrder {
   subtotal: number;
   tax: number;
   total: number;
+  transactionId?: String;
   user?: IUser | string;
 }
 
