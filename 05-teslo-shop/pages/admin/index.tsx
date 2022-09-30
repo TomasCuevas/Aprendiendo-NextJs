@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import useSWR from "swr";
 import { Grid, Typography } from "@mui/material";
 
@@ -27,7 +27,7 @@ import { AdminLayout } from "../../components/layouts/AdminLayout";
 //* interfaces *//
 import { DashboardSummaryResponse } from "../../interfaces/dashboard";
 
-const DashboardPage = () => {
+const DashboardPage: NextPage = () => {
   const { data, error } = useSWR<DashboardSummaryResponse>(
     "/api/admin/dashboard",
     {
