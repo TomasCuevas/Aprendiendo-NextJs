@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Box } from "@mui/material";
 
-//* interface *//
+//* interfaces *//
 interface AuthLayoutProps {
   children: React.ReactNode;
   title: string;

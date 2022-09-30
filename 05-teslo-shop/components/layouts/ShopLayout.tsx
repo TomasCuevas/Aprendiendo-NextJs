@@ -4,6 +4,7 @@ import Head from "next/head";
 import { Navbar } from "../ui/Navbar";
 import { SideMenu } from "../ui/SideMenu";
 
+//* interfaces *//
 interface ShopLayoutProps {
   children: React.ReactNode;
   title: string;
