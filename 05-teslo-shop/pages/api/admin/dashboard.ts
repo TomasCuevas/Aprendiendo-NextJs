@@ -1,25 +1,42 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/react";
 
 //* database *//
 import ProductModel from "../../../database/models/Product";
 import UserModel from "../../../database/models/User";
 import OrderModel from "../../../database/models/Order";
 
-type Data = {
-  numberOfClients: number;
-  numberOfProducts: number;
-  lowInventory: number;
-  productsWithNoInventory: number;
-  numberOfOrders: number;
-  paidOrders: number;
-  notPaidOrders: number;
-};
+type Data =
+  | {
+      numberOfClients: number;
+      numberOfProducts: number;
+      lowInventory: number;
+      productsWithNoInventory: number;
+      numberOfOrders: number;
+      paidOrders: number;
+      notPaidOrders: number;
+    }
+  | { message: string };
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  console.log(req);
+  const session = await getSession({ req });
+
+  if (!session) {
+    return res.status(400).json({
+      message: "Necesitas una sesion activa.",
+    });
+  }
+
+  const { role } = session.user as { role: string };
+
+  if (role !== "admin") {
+    return res.status(400).json({
+      message: "Solo los administradores tienen acceso.",
+    });
+  }
 
   const [
     numberOfClients,

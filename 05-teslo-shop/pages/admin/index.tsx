@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { GetServerSideProps } from "next";
 import useSWR from "swr";
 import { Grid, Typography } from "@mui/material";
 
@@ -22,6 +23,7 @@ import { AdminLayout } from "../../components/layouts/AdminLayout";
 
 //* interfaces *//
 import { DashboardSummaryResponse } from "../../interfaces/dashboard";
+import { getSession } from "next-auth/react";
 
 const DashboardPage = () => {
   const { data, error } = useSWR<DashboardSummaryResponse>(
@@ -119,6 +121,33 @@ const DashboardPage = () => {
       </Grid>
     </AdminLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const session = await getSession({ req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  const { role } = session.user as { role: string };
+
+  if (role !== "admin") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default DashboardPage;
