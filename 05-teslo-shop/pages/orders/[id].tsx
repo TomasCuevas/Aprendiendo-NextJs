@@ -1,3 +1,4 @@
+import { useState } from "react";
 import NextLink from "next/link";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
@@ -10,6 +11,7 @@ import {
   Card,
   CardContent,
   Chip,
+  CircularProgress,
   Divider,
   Grid,
   Link,
@@ -46,17 +48,15 @@ interface OrderPageProps {
 const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
   const router = useRouter();
   const { shippingAddress } = order;
-  const summary = {
-    numberOfItems: order.numberOfItems,
-    subtotal: order.subtotal,
-    taxes: order.tax,
-    total: order.total,
-  };
+
+  const [isPaying, setIsPaying] = useState(false);
 
   const onOrderCompleted = async (details: OrderResponseBody) => {
     if (details.status !== "COMPLETED") {
       return alert("No se pudo realizar el pago en PayPal");
     }
+
+    setIsPaying(true);
 
     try {
       const { data } = await tesloApi.post("/orders/pay", {
@@ -67,6 +67,7 @@ const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
       router.reload();
     } catch (error) {
       console.log(error);
+      setIsPaying(false);
       alert(error);
     }
   };
@@ -134,18 +135,32 @@ const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
               <Typography>{shippingAddress.phone}</Typography>
 
               <Divider sx={{ my: 1 }} />
-              <OrderSummary summary={summary} />
+              <OrderSummary summary={order} />
               <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
-                {order.isPaid ? (
-                  <Chip
-                    sx={{ my: 2 }}
-                    label="Pagada"
-                    variant="outlined"
-                    color="success"
-                    icon={<CreditScoreOutlined />}
-                  />
-                ) : (
-                  <>
+                {
+                  <Box
+                    display="flex"
+                    className="fadeIn"
+                    justifyContent="center"
+                    sx={{ display: isPaying ? "flex" : "none" }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                }
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  sx={{ display: isPaying ? "none" : "flex" }}
+                >
+                  {order.isPaid ? (
+                    <Chip
+                      sx={{ my: 2 }}
+                      label="Pagada"
+                      variant="outlined"
+                      color="success"
+                      icon={<CreditScoreOutlined />}
+                    />
+                  ) : (
                     <PayPalButtons
                       createOrder={(data, actions) => {
                         return actions.order.create({
@@ -164,15 +179,8 @@ const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
                         });
                       }}
                     />
-                    <Chip
-                      sx={{ my: 2 }}
-                      label="Pendiente de pago"
-                      variant="outlined"
-                      color="error"
-                      icon={<CreditCardOffOutlined />}
-                    />
-                  </>
-                )}
+                  )}
+                </Box>
               </Box>
             </CardContent>
           </Card>

@@ -10,7 +10,7 @@ export interface IOrder {
   paymentResult?: string;
   shippingAddress: ShippingAddress;
   subtotal: number;
-  tax: number;
+  taxes: number;
   total: number;
   transactionId?: String;
   user?: IUser | string;

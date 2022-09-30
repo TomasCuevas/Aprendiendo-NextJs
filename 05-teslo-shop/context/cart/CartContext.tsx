@@ -172,7 +172,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       shippingAddress,
       numberOfItems: cart.numberOfItems,
       subtotal: cart.subtotal,
-      tax: cart.taxes,
+      taxes: cart.taxes,
       total: cart.total,
       isPaid: false,
     };
