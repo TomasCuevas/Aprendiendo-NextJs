@@ -51,7 +51,7 @@ const productSchema = new Schema(
 
 productSchema.index({ title: "text", tags: "text", description: "text" });
 
-const Product: Model<IProduct> =
+const ProductModel: Model<IProduct> =
   mongoose.models.products || model("products", productSchema);
 
-export default Product;
+export default ProductModel;
