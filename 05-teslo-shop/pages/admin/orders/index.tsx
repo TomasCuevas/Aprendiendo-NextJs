@@ -6,10 +6,10 @@ import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { ConfirmationNumberOutlined } from "@mui/icons-material";
 
 //* layout *//
-import { AdminLayout } from "../../components/layouts/AdminLayout";
+import { AdminLayout } from "../../../components/layouts/AdminLayout";
 
 //* utils *//
-import { verifyAdminInPage } from "../../utils/verifyAdminInPage";
+import { verifyAdminInPage } from "../../../utils/verifyAdminInPage";
 import useSWR from "swr";
 
 const columns: GridColDef[] = [
@@ -55,8 +55,8 @@ const columns: GridColDef[] = [
 ];
 
 //* interfaces *//
-import { IOrder } from "../../interfaces/order";
-import { IUser } from "../../interfaces/user";
+import { IOrder } from "../../../interfaces/order";
+import { IUser } from "../../../interfaces/user";
 
 const OrdersPage: NextPage = () => {
   const { data, error } = useSWR<IOrder[]>("/api/admin/orders");

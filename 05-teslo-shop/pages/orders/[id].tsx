@@ -7,7 +7,6 @@ import { getSession } from "next-auth/react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Chip,
