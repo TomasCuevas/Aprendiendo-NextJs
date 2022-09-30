@@ -14,6 +14,7 @@ export interface IOrder {
   total: number;
   transactionId?: String;
   user?: IUser | string;
+  createdAt: string;
 }
 
 export interface IOrderItem {
