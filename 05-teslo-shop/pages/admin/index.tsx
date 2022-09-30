@@ -15,6 +15,9 @@ import {
   ProductionQuantityLimitsOutlined,
 } from "@mui/icons-material";
 
+//* utils *//
+import { verifyAdminInPage } from "../../utils/verifyAdminInPage";
+
 //* components *//
 import { SummaryTile } from "../../components/admin/SummaryTile";
 
@@ -23,7 +26,6 @@ import { AdminLayout } from "../../components/layouts/AdminLayout";
 
 //* interfaces *//
 import { DashboardSummaryResponse } from "../../interfaces/dashboard";
-import { getSession } from "next-auth/react";
 
 const DashboardPage = () => {
   const { data, error } = useSWR<DashboardSummaryResponse>(
@@ -124,19 +126,8 @@ const DashboardPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const session = await getSession({ req });
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  const { role } = session.user as { role: string };
-
-  if (role !== "admin") {
+  const isAdmin = await verifyAdminInPage(req);
+  if (!isAdmin) {
     return {
       redirect: {
         destination: "/",

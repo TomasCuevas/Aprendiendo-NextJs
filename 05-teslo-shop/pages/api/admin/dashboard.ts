@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
+
+//* utils *//
+import { verifyAdmin } from "../../../utils/verifyAdmin";
 
 //* database *//
 import ProductModel from "../../../database/models/Product";
@@ -22,21 +24,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const session = await getSession({ req });
-
-  if (!session) {
-    return res.status(400).json({
-      message: "Necesitas una sesion activa.",
-    });
-  }
-
-  const { role } = session.user as { role: string };
-
-  if (role !== "admin") {
-    return res.status(400).json({
-      message: "Solo los administradores tienen acceso.",
-    });
-  }
+  await verifyAdmin(req, res);
 
   const [
     numberOfClients,
