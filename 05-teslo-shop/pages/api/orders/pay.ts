@@ -68,10 +68,10 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     });
   }
 
-  const { transactiodId = "", orderId = "" } = req.body;
+  const { transactionId = "", orderId = "" } = req.body;
 
   const { data } = await axios.get<IPayPalOrderStatus>(
-    `${process.env.PAYPAL_ORDERS_URL}/${transactiodId}`,
+    `${process.env.PAYPAL_ORDERS_URL}/${transactionId}`,
     {
       headers: {
         Authorization: `Bearer ${paypalBearerToken}`,
@@ -100,9 +100,11 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     });
   }
 
-  dbOrder.transactionId = transactiodId;
+  dbOrder.transactionId = transactionId;
   dbOrder.isPaid = true;
   await dbOrder.save();
 
-  return res.status(200).json({ message: "Orden pagada exitosamente." });
+  return res.status(200).json({
+    message: "Orden pagada exitosamente.",
+  });
 };

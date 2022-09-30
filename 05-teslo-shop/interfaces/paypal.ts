@@ -6,7 +6,12 @@ export interface IPayPalOrderStatus {
   payer: Pay;
   payment_source: PaymentSource;
   purchase_units: PurchaseUnit[];
-  status: string;
+  status:
+    | "COMPLETED"
+    | "SAVED"
+    | "APPROVED"
+    | "VOIDED"
+    | "PAYER_ACTION_REQUIRED";
   update_time: Date;
 }
 
@@ -98,3 +103,13 @@ export interface ShippingAddress {
 export interface ShippingName {
   full_name: string;
 }
+
+export type OrderResponseBody = {
+  id: string;
+  status:
+    | "COMPLETED"
+    | "SAVED"
+    | "APPROVED"
+    | "VOIDED"
+    | "PAYER_ACTION_REQUIRED";
+};

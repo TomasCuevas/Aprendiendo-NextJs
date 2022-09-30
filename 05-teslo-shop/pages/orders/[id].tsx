@@ -1,6 +1,7 @@
 import NextLink from "next/link";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import {
@@ -31,20 +32,43 @@ import { OrderSummary } from "../../components/cart/OrderSummary";
 //* database *//
 import { getOrderById } from "../../database/dbOrders";
 
+//* api *//
+import tesloApi from "../../api/tesloApi";
+
 //* interfaces *//
 import { IOrder } from "../../interfaces/order";
+import { OrderResponseBody } from "../../interfaces/paypal";
 
 interface OrderPageProps {
   order: IOrder;
 }
 
 const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
+  const router = useRouter();
   const { shippingAddress } = order;
   const summary = {
     numberOfItems: order.numberOfItems,
     subtotal: order.subtotal,
     taxes: order.tax,
     total: order.total,
+  };
+
+  const onOrderCompleted = async (details: OrderResponseBody) => {
+    if (details.status !== "COMPLETED") {
+      return alert("No se pudo realizar el pago en PayPal");
+    }
+
+    try {
+      const { data } = await tesloApi.post("/orders/pay", {
+        transactionId: details.id,
+        orderId: order._id,
+      });
+
+      router.reload();
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
   };
 
   return (
@@ -136,8 +160,7 @@ const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
                       }}
                       onApprove={(data, actions) => {
                         return actions.order!.capture().then((details) => {
-                          console.log({ details });
-                          const name = details.payer.name.given_name;
+                          onOrderCompleted(details);
                         });
                       }}
                     />
