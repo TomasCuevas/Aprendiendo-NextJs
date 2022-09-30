@@ -33,6 +33,7 @@ import {
 //* contexts *//
 import { AuthContext } from "../../context/auth/AuthContext";
 import { UiContext } from "../../context/ui/UiContext";
+import { DashboardOutlined } from "@mui/icons-material";
 
 export const SideMenu = () => {
   const { push, asPath } = useRouter();
@@ -154,11 +155,11 @@ export const SideMenu = () => {
               <Divider />
               <ListSubheader>Admin Panel</ListSubheader>
 
-              <ListItem button>
+              <ListItem onClick={() => navigateTo("/admin")} button>
                 <ListItemIcon>
-                  <CategoryOutlined />
+                  <DashboardOutlined />
                 </ListItemIcon>
-                <ListItemText primary={"Productos"} />
+                <ListItemText primary={"Dashboard"} />
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
