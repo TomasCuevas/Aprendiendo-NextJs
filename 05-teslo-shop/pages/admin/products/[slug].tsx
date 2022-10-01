@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -69,9 +70,27 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     getValues,
     setValue,
     control,
+    watch,
   } = useForm<FormData>({
     defaultValues: product,
   });
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === "title") {
+        const newSlug =
+          value.title
+            ?.trim()
+            .replaceAll(" ", "_")
+            .replaceAll("'", "")
+            .toLowerCase() || "";
+
+        setValue("slug", newSlug);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, setValue]);
 
   const onChangeSize = (size: string) => {
     const currentSizes = getValues("sizes");
