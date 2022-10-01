@@ -9,10 +9,11 @@ export interface IProduct {
   tags: string[];
   title: string;
   type: IValidTypes;
-  gender: "men" | "women" | "kid" | "unisex";
+  gender: IValidGender;
   createdAt: string;
   updatedAt: string;
 }
 
 export type IValidSizes = "XS" | "S" | "M" | "L" | "XL" | "XXL" | "XXXL";
 export type IValidTypes = "shirts" | "pants" | "hoodies" | "hats";
+export type IValidGender = "men" | "women" | "kid" | "unisex";

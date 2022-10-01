@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -43,6 +43,7 @@ const validSizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 //* intefaces *//
 import {
   IProduct,
+  IValidGender,
   IValidSizes,
   IValidTypes,
 } from "../../../interfaces/products";
@@ -70,7 +71,10 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+    getValues,
+    setValue,
+    control,
+  } = useForm<FormData>({
     defaultValues: product,
   });
 
@@ -158,41 +162,47 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
 
             <Divider sx={{ my: 1 }} />
 
-            <FormControl sx={{ mb: 1 }}>
-              <FormLabel>Tipo</FormLabel>
-              <RadioGroup
-                row
-                // value={ status }
-                // onChange={ onStatusChanged }
-              >
-                {validTypes.map((option) => (
-                  <FormControlLabel
-                    key={option}
-                    value={option}
-                    control={<Radio color="secondary" />}
-                    label={capitalize(option)}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
+            <Controller
+              name="type"
+              control={control}
+              defaultValue={undefined}
+              render={({ field }) => (
+                <FormControl sx={{ mb: 1 }}>
+                  <FormLabel>Tipo</FormLabel>
+                  <RadioGroup row {...field}>
+                    {validTypes.map((option) => (
+                      <FormControlLabel
+                        key={option}
+                        value={option}
+                        control={<Radio color="secondary" />}
+                        label={capitalize(option)}
+                      />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+              )}
+            />
 
-            <FormControl sx={{ mb: 1 }}>
-              <FormLabel>Género</FormLabel>
-              <RadioGroup
-                row
-                // value={ status }
-                // onChange={ onStatusChanged }
-              >
-                {validGender.map((option) => (
-                  <FormControlLabel
-                    key={option}
-                    value={option}
-                    control={<Radio color="secondary" />}
-                    label={capitalize(option)}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
+            <Controller
+              name="gender"
+              control={control}
+              defaultValue={undefined}
+              render={({ field }) => (
+                <FormControl sx={{ mb: 1 }}>
+                  <FormLabel>Género</FormLabel>
+                  <RadioGroup row {...field}>
+                    {validGender.map((option) => (
+                      <FormControlLabel
+                        key={option}
+                        value={option}
+                        control={<Radio color="secondary" />}
+                        label={capitalize(option)}
+                      />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+              )}
+            />
 
             <FormGroup>
               <FormLabel>Tallas</FormLabel>
