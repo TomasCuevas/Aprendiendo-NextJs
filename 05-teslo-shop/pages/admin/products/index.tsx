@@ -1,16 +1,17 @@
 import { NextPage, GetServerSideProps } from "next";
 import useSWR from "swr";
-import { CardMedia, Chip, Grid } from "@mui/material";
+import NextLink from "next/link";
+import { CardMedia, Chip, Grid, Link } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 
 //* icons *//
 import { CategoryOutlined } from "@mui/icons-material";
 
 //* layout *//
-import { AdminLayout } from "../../components/layouts/AdminLayout";
+import { AdminLayout } from "../../../components/layouts/AdminLayout";
 
 //* utils *//
-import { verifyAdminInPage } from "../../utils/verifyAdminInPage";
+import { verifyAdminInPage } from "../../../utils/verifyAdminInPage";
 
 const columns: GridColDef[] = [
   {
@@ -29,7 +30,18 @@ const columns: GridColDef[] = [
       );
     },
   },
-  { field: "title", headerName: "Titulo", width: 200 },
+  {
+    field: "title",
+    headerName: "Titulo",
+    width: 200,
+    renderCell: ({ row }: GridRenderCellParams) => {
+      return (
+        <NextLink href={`/admin/products/${row.slug}`} passHref>
+          <Link>{row.title}</Link>
+        </NextLink>
+      );
+    },
+  },
   { field: "gender", headerName: "Genero", width: 200 },
   { field: "type", headerName: "Tipo", width: 200 },
   { field: "inStock", headerName: "Inventario", width: 200 },
@@ -38,7 +50,7 @@ const columns: GridColDef[] = [
 ];
 
 //* interfaces *//
-import { IProduct } from "../../interfaces/products";
+import { IProduct } from "../../../interfaces/products";
 
 const ProductsPage: NextPage = () => {
   const { data, error } = useSWR<IProduct[]>("/api/admin/products");
