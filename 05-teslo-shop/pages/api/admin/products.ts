@@ -44,9 +44,10 @@ const updateProduct = async (
   res: NextApiResponse<Data>
 ) => {
   await verifyAdmin(req, res);
+
   const { _id = "", images = [] } = req.body as IProduct;
 
-  if (isValidObjectId(_id)) {
+  if (!isValidObjectId(_id)) {
     return res.status(400).json({
       message: "El ID del producto no es valido.",
     });
@@ -78,6 +79,4 @@ const updateProduct = async (
       message: "Revisar los logs del servidor.",
     });
   }
-
-  await connect();
 };

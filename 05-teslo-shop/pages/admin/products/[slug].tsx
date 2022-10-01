@@ -41,6 +41,9 @@ const validTypes = ["shirts", "pants", "hoodies", "hats"];
 const validGender = ["men", "women", "kid", "unisex"];
 const validSizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
+//* api *//
+import tesloApi from "../../../api/tesloApi";
+
 //* intefaces *//
 import { IProduct } from "../../../interfaces/products";
 
@@ -64,6 +67,7 @@ interface ProductAdminPageProps {
 
 const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
   const [newTag, setNewTag] = useState<string>("");
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const {
     register,
@@ -108,7 +112,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
   };
 
   const onAddTag = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.code === "Space" && newTag.trim().length > 2) {
+    if (event.code === "Space" && newTag.trim().length > 1) {
       const currentTags = getValues("tags");
       if (currentTags.includes(newTag.trim().toLowerCase())) return;
 
@@ -126,8 +130,26 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     );
   };
 
-  const onSubmitForm = (form: FormData) => {
-    console.log(form);
+  const onSubmitForm = async (form: FormData) => {
+    if (form.images.length < 2) return;
+    setIsSaving(true);
+
+    try {
+      const { data } = await tesloApi({
+        url: "/admin/products",
+        method: "PUT",
+        data: form,
+      });
+
+      console.log(data);
+      if (!form._id) {
+      } else {
+        setIsSaving(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -143,6 +165,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
             startIcon={<SaveOutlined />}
             sx={{ width: "150px" }}
             type="submit"
+            disabled={isSaving}
           >
             Guardar
           </Button>
