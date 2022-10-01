@@ -1,4 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -40,14 +41,44 @@ const validGender = ["men", "women", "kid", "unisex"];
 const validSizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
 //* intefaces *//
-import { IProduct } from "../../../interfaces/products";
+import {
+  IProduct,
+  IValidSizes,
+  IValidTypes,
+} from "../../../interfaces/products";
+
+interface FormData {
+  _id?: string;
+  description: string;
+  images: string[];
+  inStock: number;
+  price: number;
+  sizes: IValidSizes[];
+  slug: string;
+  tags: string[];
+  title: string;
+  type: IValidTypes;
+  gender: "men" | "women" | "kid" | "unisex";
+}
 
 interface ProductAdminPageProps {
   product: IProduct;
 }
 
 const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: product,
+  });
+
   const onDeleteTag = (tag: string) => {};
+
+  const onSubmitForm = (form: FormData) => {
+    console.log(form);
+  };
 
   return (
     <AdminLayout
@@ -55,7 +86,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
       subtitle={`Editando: ${product.title}`}
       icon={<DriveFileRenameOutline />}
     >
-      <form>
+      <form onSubmit={handleSubmit(onSubmitForm)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
             color="secondary"
@@ -75,12 +106,12 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
               variant="filled"
               fullWidth
               sx={{ mb: 1 }}
-              // { ...register('name', {
-              //     required: 'Este campo es requerido',
-              //     minLength: { value: 2, message: 'Mínimo 2 caracteres' }
-              // })}
-              // error={ !!errors.name }
-              // helperText={ errors.name?.message }
+              {...register("title", {
+                required: "Este campo es requerido",
+                minLength: { value: 5, message: "Mínimo 5 caracteres" },
+              })}
+              error={!!errors.title}
+              helperText={errors.title?.message}
             />
 
             <TextField
@@ -89,6 +120,12 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
               fullWidth
               multiline
               sx={{ mb: 1 }}
+              {...register("description", {
+                required: "Este campo es requerido",
+                minLength: { value: 5, message: "Mínimo 5 caracteres" },
+              })}
+              error={!!errors.description}
+              helperText={errors.description?.message}
             />
 
             <TextField
@@ -97,6 +134,12 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
               variant="filled"
               fullWidth
               sx={{ mb: 1 }}
+              {...register("inStock", {
+                required: "Este campo es requerido",
+                min: { value: 0, message: "Minimo de valor 0" },
+              })}
+              error={!!errors.inStock}
+              helperText={errors.inStock?.message}
             />
 
             <TextField
@@ -105,6 +148,12 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
               variant="filled"
               fullWidth
               sx={{ mb: 1 }}
+              {...register("price", {
+                required: "Este campo es requerido",
+                min: { value: 0, message: "Valor minimo de $0" },
+              })}
+              error={!!errors.price}
+              helperText={errors.price?.message}
             />
 
             <Divider sx={{ my: 1 }} />
@@ -164,6 +213,15 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
               variant="filled"
               fullWidth
               sx={{ mb: 1 }}
+              {...register("slug", {
+                required: "Este campo es requerido",
+                validate: (value) =>
+                  value.includes(" ")
+                    ? "No puede tener espacios en blanco"
+                    : undefined,
+              })}
+              error={!!errors.slug}
+              helperText={errors.slug?.message}
             />
 
             <TextField

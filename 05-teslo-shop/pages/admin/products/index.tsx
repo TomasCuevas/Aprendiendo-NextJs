@@ -33,7 +33,7 @@ const columns: GridColDef[] = [
   {
     field: "title",
     headerName: "Titulo",
-    width: 200,
+    width: 250,
     renderCell: ({ row }: GridRenderCellParams) => {
       return (
         <NextLink href={`/admin/products/${row.slug}`} passHref>
@@ -42,11 +42,11 @@ const columns: GridColDef[] = [
       );
     },
   },
-  { field: "gender", headerName: "Genero", width: 200 },
-  { field: "type", headerName: "Tipo", width: 200 },
-  { field: "inStock", headerName: "Inventario", width: 200 },
-  { field: "price", headerName: "Precio", width: 200 },
-  { field: "sizes", headerName: "Tallas", width: 200 },
+  { field: "gender", headerName: "Genero", width: 150, align: "center" },
+  { field: "type", headerName: "Tipo", width: 150, align: "center" },
+  { field: "inStock", headerName: "Inventario", width: 150, align: "center" },
+  { field: "price", headerName: "Precio", width: 150, align: "center" },
+  { field: "sizes", headerName: "Tallas", width: 200, align: "center" },
 ];
 
 //* interfaces *//
