@@ -1,4 +1,5 @@
 import { NextPage, GetServerSideProps } from "next";
+import useSWR from "swr";
 import { Chip, Grid } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 
@@ -10,7 +11,6 @@ import { AdminLayout } from "../../../components/layouts/AdminLayout";
 
 //* utils *//
 import { verifyAdminInPage } from "../../../utils/verifyAdminInPage";
-import useSWR from "swr";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "Order ID", width: 250 },
