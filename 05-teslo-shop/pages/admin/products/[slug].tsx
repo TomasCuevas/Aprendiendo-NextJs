@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -63,6 +63,8 @@ interface ProductAdminPageProps {
 }
 
 const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
+  const [newTag, setNewTag] = useState<string>("");
+
   const {
     register,
     handleSubmit,
@@ -105,7 +107,24 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     setValue("sizes", [...currentSizes, size], { shouldValidate: true });
   };
 
-  const onDeleteTag = (tag: string) => {};
+  const onAddTag = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.code === "Space" && newTag.trim().length > 2) {
+      const currentTags = getValues("tags");
+      if (currentTags.includes(newTag.trim().toLowerCase())) return;
+
+      setValue("tags", [...currentTags, newTag.trim().toLowerCase()]);
+      setNewTag("");
+    }
+  };
+
+  const onDeleteTag = (tag: string) => {
+    const currentTags = getValues("tags");
+    setValue(
+      "tags",
+      currentTags.filter((t) => t !== tag),
+      { shouldValidate: true }
+    );
+  };
 
   const onSubmitForm = (form: FormData) => {
     console.log(form);
@@ -246,7 +265,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
             </FormGroup>
           </Grid>
 
-          {/* Tags e imagenes */}
+          {/* Slug, Tags e Imagenes */}
           <Grid item xs={12} sm={6}>
             <TextField
               label="Slug - URL"
@@ -270,6 +289,9 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
               fullWidth
               sx={{ mb: 1 }}
               helperText="Presiona [spacebar] para agregar"
+              onKeyDown={onAddTag}
+              onChange={({ target }) => setNewTag(target.value)}
+              value={newTag}
             />
 
             <Box
@@ -282,7 +304,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
               }}
               component="ul"
             >
-              {product.tags.map((tag) => {
+              {getValues("tags").map((tag) => {
                 return (
                   <Chip
                     key={tag}
