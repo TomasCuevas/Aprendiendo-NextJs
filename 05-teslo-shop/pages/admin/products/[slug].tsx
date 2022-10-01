@@ -41,12 +41,7 @@ const validGender = ["men", "women", "kid", "unisex"];
 const validSizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
 //* intefaces *//
-import {
-  IProduct,
-  IValidGender,
-  IValidSizes,
-  IValidTypes,
-} from "../../../interfaces/products";
+import { IProduct } from "../../../interfaces/products";
 
 interface FormData {
   _id?: string;
@@ -54,11 +49,11 @@ interface FormData {
   images: string[];
   inStock: number;
   price: number;
-  sizes: IValidSizes[];
+  sizes: string[];
   slug: string;
   tags: string[];
   title: string;
-  type: IValidTypes;
+  type: string;
   gender: "men" | "women" | "kid" | "unisex";
 }
 
@@ -77,6 +72,19 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
   } = useForm<FormData>({
     defaultValues: product,
   });
+
+  const onChangeSize = (size: string) => {
+    const currentSizes = getValues("sizes");
+    if (currentSizes.includes(size)) {
+      return setValue(
+        "sizes",
+        currentSizes.filter((s) => s !== size),
+        { shouldValidate: true }
+      );
+    }
+
+    setValue("sizes", [...currentSizes, size], { shouldValidate: true });
+  };
 
   const onDeleteTag = (tag: string) => {};
 
@@ -209,8 +217,11 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
               {validSizes.map((size) => (
                 <FormControlLabel
                   key={size}
-                  control={<Checkbox />}
+                  control={
+                    <Checkbox checked={getValues("sizes").includes(size)} />
+                  }
                   label={size}
+                  onChange={() => onChangeSize(size)}
                 />
               ))}
             </FormGroup>
