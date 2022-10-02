@@ -54,7 +54,7 @@ export const CardList = ({ editable = false, products }: CardListProps) => {
                 <Link>
                   <CardActionArea>
                     <CardMedia
-                      image={`/products/${product.image}`}
+                      image={product.image}
                       component="img"
                       sx={{ borderRadius: "5px" }}
                     />
