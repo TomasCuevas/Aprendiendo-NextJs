@@ -1,5 +1,6 @@
 import { KeyboardEvent, useEffect, useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
+import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import {
   Box,
@@ -22,6 +23,9 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
+
+//* database *//
+import ProductModel from "../../../database/models/Product";
 
 //* layout *//
 import { AdminLayout } from "../../../components/layouts/AdminLayout";
@@ -66,6 +70,7 @@ interface ProductAdminPageProps {
 }
 
 const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
+  const router = useRouter();
   const [newTag, setNewTag] = useState<string>("");
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
@@ -137,17 +142,16 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     try {
       const { data } = await tesloApi({
         url: "/admin/products",
-        method: "PUT",
+        method: form._id ? "PUT" : "POST",
         data: form,
       });
 
-      console.log(data);
       if (!form._id) {
+        router.replace(`/admin/products/${data.slug}`);
       } else {
         setIsSaving(false);
       }
     } catch (error) {
-      console.log(error);
       setIsSaving(false);
     }
   };
@@ -390,7 +394,17 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { slug = "" } = query;
 
-  const product = await getProductBySlug(slug.toString());
+  let product: IProduct | null;
+
+  if (slug === "new") {
+    const tempProduct = JSON.parse(JSON.stringify(new ProductModel()));
+    delete tempProduct._id;
+    tempProduct.images = ["img1.jpg", "img2.jpg"];
+
+    product = tempProduct;
+  } else {
+    product = await getProductBySlug(slug.toString());
+  }
 
   if (!product) {
     return {
