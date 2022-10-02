@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
@@ -71,6 +71,8 @@ interface ProductAdminPageProps {
 
 const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [newTag, setNewTag] = useState<string>("");
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
@@ -103,6 +105,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     return () => subscription.unsubscribe();
   }, [watch, setValue]);
 
+  //* change size
   const onChangeSize = (size: string) => {
     const currentSizes = getValues("sizes");
     if (currentSizes.includes(size)) {
@@ -116,6 +119,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     setValue("sizes", [...currentSizes, size], { shouldValidate: true });
   };
 
+  //* add tag
   const onAddTag = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.code === "Space" && newTag.trim().length > 1) {
       const currentTags = getValues("tags");
@@ -126,6 +130,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     }
   };
 
+  //* delete tag
   const onDeleteTag = (tag: string) => {
     const currentTags = getValues("tags");
     setValue(
@@ -135,6 +140,19 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
     );
   };
 
+  //* update images
+  const onFilesSelected = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    if (!target.files || target.files.length === 0) return;
+
+    try {
+      for (const file of target.files) {
+        const formData = new FormData();
+        console.log(file);
+      }
+    } catch (error) {}
+  };
+
+  //* submit form
   const onSubmitForm = async (form: FormData) => {
     if (form.images.length < 2) return;
     setIsSaving(true);
@@ -354,9 +372,18 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
                 fullWidth
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3 }}
+                onClick={() => inputRef.current?.click()}
               >
                 Cargar imagen
               </Button>
+              <input
+                type="file"
+                multiple
+                accept="image/png, image/gif, image/jpeg, image/jpg"
+                style={{ display: "none" }}
+                ref={inputRef}
+                onChange={onFilesSelected}
+              />
 
               <Chip
                 label="Es necesario al 2 imagenes"
