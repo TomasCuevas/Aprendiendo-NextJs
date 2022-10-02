@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { verifyAdmin } from "../../../utils/verifyAdmin";
 import { parseFiles } from "../../../utils/parseFiles";
 
+//* config *//
 export const config = {
   api: {
     bodyParser: false,
