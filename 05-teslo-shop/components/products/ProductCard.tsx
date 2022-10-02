@@ -42,7 +42,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               component="img"
               image={
                 isHovered
-                  ? `/products/${product.images[1]}`
+                  ? product.images[1].includes("https://")
+                    ? product.images[1]
+                    : `/products/${product.images[1]}`
+                  : product.images[0].includes("https://")
+                  ? product.images[0]
                   : `/products/${product.images[0]}`
               }
               alt={product.title}

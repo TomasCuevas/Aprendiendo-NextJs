@@ -11,7 +11,7 @@ export const ProductSlideshow = ({ images }: ProductSlideshowProps) => {
   return (
     <Slide easing="ease" duration={7000} indicators>
       {images.map((image) => {
-        const url = `/products/${image}`;
+        const url = image.includes("https://") ? image : `/products/${image}`;
 
         return (
           <div className={Styles["each-slide-effect"]} key={image}>

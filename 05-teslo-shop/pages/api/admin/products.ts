@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { isValidObjectId } from "mongoose";
+import { v2 as cloudinary } from "cloudinary";
 
 //* database *//
 import { connect } from "../../../database/config";
@@ -108,6 +109,17 @@ const updateProduct = async (
         message: "No existe producto con el ID ingresado.",
       });
     }
+
+    product.images.forEach(async (image) => {
+      if (!images.includes(image)) {
+        const [fileId, extension] = image
+          .substring(image.lastIndexOf("/") + 1)
+          .split(".");
+
+        console.log(fileId);
+        await cloudinary.uploader.destroy(fileId);
+      }
+    });
 
     await product.update(req.body);
     await product.save();

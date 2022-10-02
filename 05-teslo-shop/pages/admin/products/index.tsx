@@ -23,7 +23,9 @@ const columns: GridColDef[] = [
           <CardMedia
             component="img"
             className="fadeIn"
-            image={`/products/${row.img}`}
+            image={
+              row.img.includes("https://") ? row.img : `/products/${row.img}`
+            }
             alt={row.title}
           />
         </a>
