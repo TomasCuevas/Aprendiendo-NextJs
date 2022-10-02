@@ -21,7 +21,7 @@ export default function handler(
     case "GET":
       return getProducts(req, res);
     case "POST":
-    // return createProduct(req, res)
+      return createProduct(req, res);
     case "PUT":
       return updateProduct(req, res);
 
@@ -29,6 +29,8 @@ export default function handler(
       return res.status(200).json({ message: "Bad request!" });
   }
 }
+
+//* GET *//
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await verifyAdmin(req, res);
 
@@ -39,6 +41,44 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   res.status(200).json(products);
 };
 
+//* POST *//
+const createProduct = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
+  await verifyAdmin(req, res);
+
+  const { images = [] } = req.body as IProduct;
+
+  if (images.length < 2) {
+    return res.status(400).json({
+      message: "El producto necesita al menos 2 imagenes.",
+    });
+  }
+
+  try {
+    await connect();
+
+    const productInDB = await ProductModel.findOne({ slug: req.body.slug });
+    if (productInDB) {
+      return res.status(400).json({
+        message: "Ya existe un producto con ese slug.",
+      });
+    }
+
+    const product = new ProductModel(req.body);
+    await product.save();
+
+    return res.status(200).json(product);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Revisar logs del servidor.",
+    });
+  }
+};
+
+//* PUT *//
 const updateProduct = async (
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -76,7 +116,7 @@ const updateProduct = async (
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: "Revisar los logs del servidor.",
+      message: "Revisar logs del servidor.",
     });
   }
 };
