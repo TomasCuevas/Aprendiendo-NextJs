@@ -5,6 +5,7 @@ import { verifyAdmin } from "../../../utils/verifyAdmin";
 import { parseFiles } from "../../../utils/parseFiles";
 
 //* config *//
+
 export const config = {
   api: {
     bodyParser: false,
@@ -31,7 +32,7 @@ export default function handler(
 const uploadFile = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await verifyAdmin(req, res);
 
-  await parseFiles(req);
+  const imageUrl = await parseFiles(req);
 
-  return res.status(200).json({ message: "Imagen subida correctamente." });
+  return res.status(200).json({ message: imageUrl });
 };

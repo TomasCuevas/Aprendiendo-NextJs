@@ -1,15 +1,22 @@
-import fs from "fs";
 import { NextApiRequest } from "next";
 import formidable from "formidable";
+import { v2 as cloudinary } from "cloudinary";
 
-const saveFile = async (file: formidable.File) => {
-  const data = fs.readFileSync(file.filepath);
-  fs.writeFileSync(`./public/${file.originalFilename}`, data);
-  fs.unlinkSync(file.filepath);
-  return;
+//* config *//
+cloudinary.config(process.env.CLOUDINARY_URL || "");
+
+const saveFile = async (file: formidable.File): Promise<string> => {
+  // const data = fs.readFileSync(file.filepath);
+  // fs.writeFileSync(`./public/${file.originalFilename}`, data);
+  // fs.unlinkSync(file.filepath);
+  const { secure_url } = await cloudinary.uploader.upload(file.filepath, {
+    folder: "Teslo-Shop",
+  });
+
+  return secure_url;
 };
 
-export const parseFiles = async (req: NextApiRequest) => {
+export const parseFiles = async (req: NextApiRequest): Promise<string> => {
   return new Promise((resolve, reject) => {
     const form = new formidable.IncomingForm();
     form.parse(req, async (error, fields, files) => {
@@ -17,8 +24,8 @@ export const parseFiles = async (req: NextApiRequest) => {
         return reject(error);
       }
 
-      await saveFile(files.file as formidable.File);
-      resolve(true);
+      const filePath = await saveFile(files.file as formidable.File);
+      resolve(filePath);
     });
   });
 };
