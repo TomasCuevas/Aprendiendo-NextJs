@@ -418,9 +418,7 @@ const ProductAdminPage: NextPage<ProductAdminPageProps> = ({ product }) => {
                       <CardMedia
                         component="img"
                         className="fadeIn"
-                        image={
-                          img.includes("https://") ? img : `/products/${img}`
-                        }
+                        image={img}
                         alt={img}
                       />
                       <CardActions>
@@ -452,7 +450,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (slug === "new") {
     const tempProduct = JSON.parse(JSON.stringify(new ProductModel()));
     delete tempProduct._id;
-    tempProduct.images = ["img1.jpg", "img2.jpg"];
 
     product = tempProduct;
   } else {

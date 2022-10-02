@@ -112,11 +112,8 @@ const updateProduct = async (
 
     product.images.forEach(async (image) => {
       if (!images.includes(image)) {
-        const [fileId, extension] = image
-          .substring(image.lastIndexOf("/") + 1)
-          .split(".");
+        const [fileId] = image.substring(image.lastIndexOf("/") + 1).split(".");
 
-        console.log(fileId);
         await cloudinary.uploader.destroy(fileId);
       }
     });
