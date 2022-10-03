@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "../../database/config";
 import ProductModel from "../../database/models/Product";
 import UserModel from "../../database/models/User";
+import OrderModel from "../../database/models/Order";
 
 //* seed data *//
 import { initialData } from "../../database/seed-data";
@@ -31,6 +32,8 @@ export default async function handler(
 
   await ProductModel.deleteMany();
   await ProductModel.insertMany(initialData.products);
+
+  await OrderModel.deleteMany();
 
   res.status(200).json({ ok: true });
 }
