@@ -46,7 +46,7 @@ const validGender = ["men", "women", "kid", "unisex"];
 const validSizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
 //* api *//
-import tesloApi from "../../../api/tesloApi";
+import tesloApi from "../../../axios/tesloApi";
 
 //* intefaces *//
 import { IProduct } from "../../../interfaces/products";

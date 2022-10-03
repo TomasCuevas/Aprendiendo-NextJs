@@ -14,7 +14,7 @@ import { AdminLayout } from "../../components/layouts/AdminLayout";
 import { verifyAdminInPage } from "../../utils/verifyAdminInPage";
 
 //* api *//
-import tesloApi from "../../api/tesloApi";
+import tesloApi from "../../axios/tesloApi";
 
 //* interfaces *//
 import { IUser } from "../../interfaces/user";

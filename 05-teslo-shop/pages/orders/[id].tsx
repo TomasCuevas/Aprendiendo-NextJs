@@ -34,7 +34,7 @@ import { OrderSummary } from "../../components/cart/OrderSummary";
 import { getOrderById } from "../../database/dbOrders";
 
 //* api *//
-import tesloApi from "../../api/tesloApi";
+import tesloApi from "../../axios/tesloApi";
 
 //* interfaces *//
 import { IOrder } from "../../interfaces/order";
